@@ -1,0 +1,5 @@
+{
+	"scene": "scenes/primitives.c",
+	"resolution": [64, 128, 256, 512, 1024, 2048],
+	"nruns": [16, 8, 4, 2, 1, 1]
+}

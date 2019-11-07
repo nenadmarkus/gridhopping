@@ -27,6 +27,33 @@ void emit_triangle(real_t v1[], real_t v2[], real_t v3[])
 	++NTRIANGS;
 }
 
+int run(int resolution, char* opath)
+{
+	if (opath!=0)
+	{
+		OUTPUT = fopen(opath, "wb");
+		if (!OUTPUT)
+		{
+			printf("* failed to open file '%s'", opath);
+			return 0;
+		}
+		unsigned char header[80] = {0, 0, 0, 0};
+		fwrite(header, 1, 80, OUTPUT); // header
+		fwrite(&NTRIANGS, 4, 1, OUTPUT);
+	}
+
+	polygonize_grid(sde_scene, 1.0f, resolution, emit_triangle);
+
+	if (opath!=0)
+	{
+		fseek(OUTPUT, 80, SEEK_SET);
+		fwrite(&NTRIANGS, 4, 1, OUTPUT);
+		fclose(OUTPUT);
+	}
+
+	return NTRIANGS;
+}
+
 int main(int argc, char* argv[])
 {
 	if (argc<2 || argc>3)
@@ -38,28 +65,13 @@ int main(int argc, char* argv[])
 	int resolution = 64;
 	sscanf(argv[1], "%d", &resolution);
 
+	char* opath = 0;
 	if (argc == 3)
-	{
-		OUTPUT = fopen(argv[2], "wb");
-		if (!OUTPUT)
-		{
-			printf("* failed to open file '%s'", argv[2]);
-			return 0;
-		}
-		unsigned char header[80] = {0, 0, 0, 0};
-		fwrite(header, 1, 80, OUTPUT); // header
-		fwrite(&NTRIANGS, 4, 1, OUTPUT);
-	}
+		opath = argv[2];
 
-	polygonize_grid(sde_scene, 1.0f, resolution, emit_triangle);
+	run(resolution, opath);
 
-	if (argc == 3)
-	{
-		fseek(OUTPUT, 80, SEEK_SET);
-		fwrite(&NTRIANGS, 4, 1, OUTPUT);
-		fclose(OUTPUT);
-	}
-	else
+	if (argc != 3)
 		printf("* the model has %d triangles\n", NTRIANGS);
 
 	return 0;
