@@ -409,7 +409,7 @@ int polygonize_cell(real_t cellverts[], real_t cellvals[], real_t borderval, voi
 
 int polygonize_grid(real_t (*sde_func)(real_t x, real_t y, real_t z), real_t side, int n, void (*emit_triangle)(real_t v1[], real_t v2[], real_t v3[]))
 {
-	real_t h = side/(n - 1);
+	real_t h = side/n;
 	int ntriang = 0;
 
 	real_t* up = (real_t*)malloc(n*n*sizeof(real_t));
@@ -419,29 +419,27 @@ int polygonize_grid(real_t (*sde_func)(real_t x, real_t y, real_t z), real_t sid
 		for(int k=0; k<n; ++k)
 		{
 			real_t x = 0*h-side/2.0f, y=j*h-side/2.0f, z=k*h-side/2.0f;
-			up[j*n + k] = sde_func(x, y, z);
+			dn[j*n + k] = sde_func(x, y, z);
 		}
 
 	int i;
-	for(i=1; i<n; ++i)
+	for(i=0; i<n; ++i)
 	{
 		int j, k;
 
 		for(j=0; j<n; ++j)
 			for(k=0; k<n; ++k)
 			{
-				real_t x = i*h-side/2.0f, y=j*h-side/2.0f, z=k*h-side/2.0f;
-				dn[j*n + k] = sde_func(x, y, z);
+				real_t x = (i+1)*h-side/2.0f, y=j*h-side/2.0f, z=k*h-side/2.0f;
+				up[j*n + k] = sde_func(x, y, z);
 			}
 
-		for(j=1; j<n; ++j)
-			for(k=1; k<n; ++k)
+		for(j=0; j<n; ++j)
+			for(k=0; k<n; ++k)
 			{
-				real_t x = i*h-side/2.0f, y=j*h-side/2.0f, z=k*h-side/2.0f;
-
-				real_t xp = i*h-side/2.0f, xm = (i-1)*h-side/2.0f;
-				real_t yp = j*h-side/2.0f, ym = (j-1)*h-side/2.0f;
-				real_t zp = k*h-side/2.0f, zm = (k-1)*h-side/2.0f;
+				real_t xm = i*h-side/2.0, xp = (i+1)*h-side/2.0;
+				real_t ym = j*h-side/2.0, yp = (j+1)*h-side/2.0;
+				real_t zm = k*h-side/2.0, zp = (k+1)*h-side/2.0;
 
 				real_t cuboid[] = {
 					xm, ym, zm,
@@ -455,14 +453,14 @@ int polygonize_grid(real_t (*sde_func)(real_t x, real_t y, real_t z), real_t sid
 				};
 
 				real_t vals[8] = {
-					up[(j-1)*n + (k-1)],
-					dn[(j-1)*n + (k-1)],
-					dn[j*n + (k-1)],
-					up[j*n + (k-1)],
-					up[(j-1)*n + k],
-					dn[(j-1)*n + k],
 					dn[j*n + k],
-					up[j*n + k]
+					up[j*n + k],
+					up[(j+1)*n + k],
+					dn[(j+1)*n + k],
+					dn[j*n + k+1],
+					up[j*n + k+1],
+					up[(j+1)*n + k+1],
+					dn[(j+1)*n + k+1]
 				};
 
 				ntriang += polygonize_cell(cuboid, vals, 0.0f, emit_triangle);
@@ -521,85 +519,67 @@ int trace_ray(
 	return 1;
 }
 
-int polygonize_grid(real_t (*sde_func)(real_t x, real_t y, real_t z), real_t side, int n, void (*emit_triangle)(real_t v1[], real_t v2[], real_t v3[]))
+int polygonize_grid(real_t (*eval_sdb)(real_t x, real_t y, real_t z), real_t side, int n, void (*emit_triangle)(real_t v1[], real_t v2[], real_t v3[]))
 {
-	real_t h = side/(n - 1);
+	real_t h = side/n;
 	int ntriang = 0;
 
 	int i;
-	for(i=1; i<n; ++i)
+	for(i=0; i<n; ++i)
 	{
 		int j;
-		for(j=1; j<n; ++j)
+		for(j=0; j<n; ++j)
 		{
-			real_t x = i*h-side/2.0f, y=j*h-side/2.0f, z;
 			int k=1;
 
 			while(1)
 			{
 				//
-				z = k*h-side/2.0f;
+				real_t x=-side/2.0f+h/2.0f+i*h, y=-side/2.0f+h/2.0f+j*h, z=-side/2.0f+h/2.0f+k*h;
 
 				real_t origin[] = {x, y, z};
 				real_t direction[] = {0.0f, 0.0f, 1.0f};
 				real_t t=0.0f, lasth=0.0f;
-				int retval = trace_ray(origin, direction, sde_func, &t, 1.05f*(side/2.0f - z), 3.0f*h, &lasth); // shoud be sqrt(3)*h/2 or smthn ???
-				if(retval==2)
-					break; // we're outside the rendering volume (t > maxt)
-				//if(retval==1)
-				//	assert(1 == 0);
-				z = origin[2] + t;
-				int k_new = (int)( (z + side/2.0f)/h );
-				if (k_new > k)
-					k = k_new;
 
-				if (k>=n || z>1.05f*side/2.0f)
+				trace_ray(origin, direction, eval_sdb, &t, 1.05f*(side/2.0f - z), 1.25f*h, &lasth);
+
+				z = origin[2] + t;
+				k = (int)( (z + side/2.0f  - h/2.0f)/h );
+
+				if (k>n-1 || z>1.05f*side/2.0f)
 					break;
 
 				//
-				while (1)
-				{
-					if (k>=n) break;
+				real_t xm = i*h-side/2.0, xp = (i+1)*h-side/2.0;
+				real_t ym = j*h-side/2.0, yp = (j+1)*h-side/2.0;
+				real_t zm = k*h-side/2.0, zp = (k+1)*h-side/2.0;
 
-					z = k*h-side/2.0f;
+				real_t cuboid[] = {
+					xm, ym, zm,
+					xp, ym, zm,
+					xp, yp, zm,
+					xm, yp, zm,
+					xm, ym, zp,
+					xp, ym, zp,
+					xp, yp, zp,
+					xm, yp, zp
+				};
 
-					real_t xp = i*h-side/2.0f, xm = (i-1)*h-side/2.0f;
-					real_t yp = j*h-side/2.0f, ym = (j-1)*h-side/2.0f;
-					real_t zp = k*h-side/2.0f, zm = (k-1)*h-side/2.0f;
+				real_t vals[8] = {
+					eval_sdb(cuboid[3*0 + 0], cuboid[3*0 + 1], cuboid[3*0 + 2]),
+					eval_sdb(cuboid[3*1 + 0], cuboid[3*1 + 1], cuboid[3*1 + 2]),
+					eval_sdb(cuboid[3*2 + 0], cuboid[3*2 + 1], cuboid[3*2 + 2]),
+					eval_sdb(cuboid[3*3 + 0], cuboid[3*3 + 1], cuboid[3*3 + 2]),
+					eval_sdb(cuboid[3*4 + 0], cuboid[3*4 + 1], cuboid[3*4 + 2]),
+					eval_sdb(cuboid[3*5 + 0], cuboid[3*5 + 1], cuboid[3*5 + 2]),
+					eval_sdb(cuboid[3*6 + 0], cuboid[3*6 + 1], cuboid[3*6 + 2]),
+					eval_sdb(cuboid[3*7 + 0], cuboid[3*7 + 1], cuboid[3*7 + 2])
+				};
 
-					real_t cuboid[] = {
-						xm, ym, zm,
-						xp, ym, zm,
-						xp, yp, zm,
-						xm, yp, zm,
-						xm, ym, zp,
-						xp, ym, zp,
-						xp, yp, zp,
-						xm, yp, zp
-					};
+				ntriang += polygonize_cell(cuboid, vals, 0.0f, emit_triangle);
 
-					real_t vals[8] = {
-						sde_func(cuboid[3*0 + 0], cuboid[3*0 + 1], cuboid[3*0 + 2]),
-						sde_func(cuboid[3*1 + 0], cuboid[3*1 + 1], cuboid[3*1 + 2]),
-						sde_func(cuboid[3*2 + 0], cuboid[3*2 + 1], cuboid[3*2 + 2]),
-						sde_func(cuboid[3*3 + 0], cuboid[3*3 + 1], cuboid[3*3 + 2]),
-						sde_func(cuboid[3*4 + 0], cuboid[3*4 + 1], cuboid[3*4 + 2]),
-						sde_func(cuboid[3*5 + 0], cuboid[3*5 + 1], cuboid[3*5 + 2]),
-						sde_func(cuboid[3*6 + 0], cuboid[3*6 + 1], cuboid[3*6 + 2]),
-						sde_func(cuboid[3*7 + 0], cuboid[3*7 + 1], cuboid[3*7 + 2])
-					};
-
-					int nt = polygonize_cell(cuboid, vals, 0.0f, emit_triangle);
-
-					++k;
-
-					if (nt > 0)
-					{
-						ntriang += nt;
-					}
-					else
-						break;
-				}
+				//
+				++k;
 			}
 		}
 	}

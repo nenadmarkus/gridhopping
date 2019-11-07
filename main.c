@@ -1,7 +1,7 @@
-#include "gridmarching.c"
-
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "gridmarching.c"
 
 real_t sde_scene(real_t x, real_t y, real_t z);
 
