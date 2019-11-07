@@ -53,8 +53,8 @@ def run(params, slowalgo=False, verbose=False):
 
 if __name__ == "__main__":
 	#
-	if len(sys.argv)!=2:
-		print('* args: <params.json>')
+	if len(sys.argv)!=2 and len(sys.argv)!=3:
+		print('* args: <params.json> [output.json]')
 		sys.exit()
 
 	params = json.loads(
@@ -63,6 +63,9 @@ if __name__ == "__main__":
 
 	#
 	print("---- fast algo ----")
-	run(params, verbose=True, slowalgo=False)
+	fastj = run(params, verbose=True, slowalgo=False)
 	print("---- slow algo ----")
-	run(params, verbose=True, slowalgo=True)
+	slowj = run(params, verbose=True, slowalgo=True)
+	#
+	with open(sys.argv[2], 'w') as fp:
+		json.dump({"fast": fastj, "slow": slowj}, fp)
