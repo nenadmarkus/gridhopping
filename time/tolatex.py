@@ -22,7 +22,7 @@ template = '''\\documentclass{standalone}
 	ylabel={Elapsed time [ms]},
 	xmin=64, xmax=1024,
 	xmode=log, log basis x=2,
-	ymin=0, ymax=3000,
+	ymin=0, ymax=15000,
 	legend pos=north west
 ]
 		\\addplot[color=black, line width=1, mark=o]
@@ -34,7 +34,7 @@ template = '''\\documentclass{standalone}
 				%s
 			};
 		\\legend{%s,%s}
-	\\end{axis}
+\\end{axis}
 \\end{tikzpicture}
 \\end{document}'''
 

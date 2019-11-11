@@ -11,7 +11,7 @@ import ctypes
 
 def compile_lib(scene, flags):
 	h = hashlib.md5((scene+flags).encode('utf8')).hexdigest()
-	os.system('cc main.c %s -fPIC -shared -o lib.%s.so %s' % (scene, h, flags))
+	os.system('cc ../main.c %s -fPIC -shared -o lib.%s.so %s' % (scene, h, flags))
 	lib = ctypes.cdll.LoadLibrary('./lib.%s.so' % h)
 	os.system('rm lib.%s.so' % h)
 	return lib

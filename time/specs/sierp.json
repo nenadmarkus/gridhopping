@@ -1,0 +1,5 @@
+{
+	"scene": "../scenes/sierp.c",
+	"resolution": [64, 128, 256, 512, 1024],
+	"nruns": [16, 8, 4, 2, 1]
+}
