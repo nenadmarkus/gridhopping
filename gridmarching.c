@@ -544,7 +544,8 @@ int polygonize_grid(real_t (*eval_sdb)(real_t x, real_t y, real_t z), real_t sid
 				trace_ray(origin, direction, eval_sdb, &t, 1.05f*(side/2.0f - z), 1.25f*h, &lasth);
 
 				z = origin[2] + t;
-				k = (int)( (z + side/2.0f  - h/2.0f)/h );
+				if( (int)( (z + side/2.0f  - h/2.0f)/h ) > k )
+					k = (int)( (z + side/2.0f  - h/2.0f)/h );
 
 				if (k>n-1 || z>1.05f*side/2.0f)
 					break;
