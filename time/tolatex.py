@@ -18,11 +18,11 @@ template = '''\\documentclass{standalone}
 \\begin{document}
 \\begin{tikzpicture}
 \\begin{axis} [
+	ymode=log,
 	xlabel={Resolution},
-	ylabel={Elapsed time [ms]},
-	xmin=64, xmax=1024,
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=2048,
 	xmode=log, log basis x=2,
-	ymin=0, ymax=15000,
 	legend pos=north west
 ]
 		\\addplot[color=black, line width=1, mark=o]
@@ -46,7 +46,7 @@ def get_rt(data):
 		r = data["resolution"][i]
 		t = data["time"][i]
 		#
-		rt += "(%f, %f)" % (r, t)
+		rt += "(%f, %f)" % (r, t/1000)
 	#
 	return rt
 
