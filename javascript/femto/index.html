@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<link rel="stylesheet" href="styles.css">
+	<title>Zepto: a tiny CAD tool</title>
+	<meta name="description" content="Emit rays, render polygons.">
+	<meta name="keywords" content="cad, computer aided design, signed distance functions, signed distance bounds, signed distance estimators, implicit functions, ray marching, sphere tracing">
+</head>
+<body>
+
+	<h1>Zepto</h1>
+		<p>
+			This is a tiny in-browser CAD tool based on the <code>gridhopping</code> algorithm
+			(read details <a href="https://github.com/nenadmarkus/gridhopping">here</a>).
+			Edit the code below the canvas and hit the build button to generate a custom shape.
+		</p>
+		<div id="VIEWPORT" style="width:100%;height:512px;"></div>
+		<div style="text-align: center">
+			<p>
+			size: <input type="number" id="size">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			resolution: <input type="number" id="resolution">
+			</p>
+		</div>
+		<textarea spellcheck="false" id="tryit" rows="19"></textarea>
+		<div style="text-align: center">
+			<button class="button-style" id="render-button">Build and render</button>
+			<button class="button-style" id="export-button">Export to STL</button>
+		</div>
+		<p id="log"></p>
+
+		<div id="stl-download-popup" class="modal">
+			<div class="modal-content">
+				<!--
+					<span id="close-modal-button" class="close-button">x</span>
+				-->
+				<h3>Export finished, download ready</h3>
+				<button class="button-style" id="download-stl-button">Download</button>
+				<hr>
+				<p>If you like this project, consider donating.</p>
+				<p>
+					EUR: <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4WNYJAYWPJX56&curency_code=EUR">via PayPal</a>
+					<br>
+					BTC: request address by email
+				</p>
+			</div>
+		</div>
+
+	<h3>Instructions</h3>
+		<p>The polygonization occurs in a cube centered at the origin and with side length equal to <code>size</code>.
+		This cube is partitioned into <code>pow(resolution, 3)</code> cells.
+		If a surface of the shape passes through a cell, polygons (triangles) are generated to approximate this.
+		You can vary the <code>size</code> and <code>resolution</code> parameters to generate more or less detailed 3D models, depending on your requirements.</p>
+
+		<p>Anything you enter will be lost as soon as this page is reloaded.
+		Thus, when building your own models, it is advised to store them in a text file locally on your computer and use copy-paste them into the code area above when you need to visualize and/or export to STL.</p>
+
+	<h2>Examples</h2>
+		<p>
+			As explained, the <code>gridhopping</code> algorithm is used to polygonize implicit functions (or signed distance bounds) of the form <code>F(x, y, z)=0</code>.
+			Note, however, that <code>F</code> has to be <a href="https://en.wikipedia.org/wiki/Lipschitz_continuity">Lipschitz continuous</a> in order to obtain correct results.
+		</p>
+
+		<p>
+			In Zepto, this function is set by the user by writing a small piece of JavaScript code.
+			For example, the following code defines a sphere with a radius equal to 0.4 centered at the origin:
+		</p>
+		<pre>// sqrt(x^2 + y^2 + z^2) - radius = 0
+return function (x, y, z) {
+	const radius = 0.4;
+	return Math.sqrt(x*x + y*y + z*z) - radius;
+}</pre>
+
+	<p>
+		You can achieve the same with a built-in function:
+	</p>
+	<pre>return sphere(0.4);</pre>
+
+	<p>
+		A more complicated example:
+	</p>
+	<pre>return function (x, y, z) {
+	const scale = 6;
+
+	x *= scale;
+	y *= scale;
+	z *= scale;
+
+	const r = Math.sqrt(x*x + y*y + z*z);
+	const phi = Math.atan2(y, x);
+	const r1 = Math.sin(1.5 * phi) + 1.5;
+	const z1 = Math.cos(1.5 * phi);
+	const r2 = Math.sin(1.5 * phi + 3.14156) + 1.5;
+	const z2 = Math.cos(1.5 * phi + 3.14156);
+
+	const x1=r1*Math.cos(phi), y1=r1*Math.sin(phi);
+	const x2=r2*Math.cos(phi), y2=r2*Math.sin(phi);
+
+	return (Math.min(
+		Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1)+(z-z1)*(z-z1)),
+		Math.sqrt((x-x2)*(x-x2)+(y-y2)*(y-y2)+(z-z2)*(z-z2))) - 0.3)/3.0/scale;
+};</pre>
+
+	<p>
+		More examples can be found <a href="https://github.com/nenadmarkus/gridhopping">here</a>.
+	</p>
+
+	<h2>About</h2>
+		<p>Copyright (c) 2020, <a href="https://github.com/nenadmarkus">Nenad Markus</a>. All rights reserved.</p>
+
+		<p>Read more about the project at <a href="https://github.com/nenadmarkus/gridhopping">https://github.com/nenadmarkus/gridhopping</a>.</p>
+
+		<p>You can reach me at <code>nenad.markus@protonmail.com</code>.</p>
+
+	<h2>Donations/support</h2>
+		<p>If you like my work, consider donating.</p>
+		<p>
+			EUR: <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4WNYJAYWPJX56&curency_code=EUR">via PayPal</a>
+			<br>
+			BTC: request address by email
+		</p>
+
+	<script src="meshviz/three.min.js"></script>
+	<script src="meshviz/webgl_detector.js"></script>
+	<script src="meshviz/OrbitControls.js"></script>
+	<script src="meshviz/viewer.js"></script>
+
+	<script src="index.js"></script>
+</body>
+</html>

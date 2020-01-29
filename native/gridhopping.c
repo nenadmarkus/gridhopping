@@ -1,3 +1,5 @@
+// see <https://github.com/nenadmarkus/gridhopping> for licensing
+
 #ifndef ABS
 #define ABS(x) ((x)<0?(-(x)):(x))
 #endif

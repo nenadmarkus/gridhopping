@@ -1,0 +1,112 @@
+body {
+	font: 14px/20px sans-serif; /* Verdana */
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 50px 50px 200px 50px;
+}
+  
+pre, code, textarea {
+	font: 14px/20px Monaco, monospace;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	background: #F9F9F9;
+	padding: 0 3px;
+	color: #555;
+	white-space: pre; /* horizontal scroll to text area, if needed */
+}
+
+pre, textarea {
+	padding: 10px;
+	width: 100%;
+}
+
+pre {
+	overflow-x:auto; /* horizontal scroll to code area, if needed */
+}
+
+/*
+textarea {
+	height: 200px;
+}
+*/
+
+textarea:focus {
+	outline: none;
+}
+
+/*
+	from <https://sabe.io/tutorials/how-to-create-modal-popup-box>
+*/
+
+.modal {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(1.1);
+	transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 1rem 1.5rem;
+	width: 26rem;
+	border-radius: 0.5rem;
+	text-align:center;
+}
+.close-button {
+	float: right;
+	width: 1.5rem;
+	line-height: 1.5rem;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 0.25rem;
+	background-color: lightgray;
+}
+.close-button:hover {
+	background-color: darkgray;
+}
+.show-modal {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+/*
+	from <https://www.bestcssbuttongenerator.com>
+*/
+
+.button-style {
+	-moz-box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	-webkit-box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	background-color:#768d87;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	border:1px solid #566963;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:11px 23px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #2b665e;
+}
+.button-style:hover {
+	background-color:#6c7c7c;
+}
+.button-style:active {
+	position:relative;
+	top:1px;
+}
