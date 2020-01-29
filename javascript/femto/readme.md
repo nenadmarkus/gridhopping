@@ -1,4 +1,4 @@
-# MikroFrog
+# Femto
 
 This is a tiny in-browser CAD tool based on the `gridhopping` algorithm.
 
@@ -15,7 +15,7 @@ To test this tool locally, do the following:
 As explained, the `gridhopping` algorithm is used to polygonize implicit functions (or signed distance bounds) of the form `F(x, y, z)=0`.
 Note, however, that `F` has to be [Lipschitz continuous](https://en.wikipedia.org/wiki/Lipschitz_continuity) in order to obtain correct results.
 
-In MikroFrog, this function is set by the user by writing a small piece of JavaScript code. For example, the following code defines a sphere with a radius equal to 0.4 centered at the origin:
+In Femto, this function is set by the user by writing a small piece of JavaScript code. For example, the following code defines a sphere with a radius equal to 0.4 centered at the origin:
 
 ```
 return function (x, y, z) {

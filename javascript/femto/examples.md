@@ -1,4 +1,4 @@
-# Examples functions for the MikroFrog CAD tool
+# Examples functions for the Femto CAD tool
 
 An ellipsoid.
 
