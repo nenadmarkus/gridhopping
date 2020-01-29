@@ -8,7 +8,7 @@ To test this tool locally, do the following:
 
 * move to the folder above this one;
 * start a Python web server: `python3 -m http.server 1111`;
-* open a web browser and go to [http://localhost:1111/zepto](http://localhost:1111/femto).
+* open a web browser and go to [http://localhost:1111/femto](http://localhost:1111/femto).
 
 ## Examples (also see [here](examples.md))
 
