@@ -12,7 +12,7 @@ const radius = 0.3;
 
 for (let i=1; i<solids.length; ++i)
 {
-	const a = (i-1)*2.0*3.14156/(solids.length-1);
+	const a = (i-1)*2.0*Math.PI/(solids.length-1);
 	solids[i] = translate(solids[i], radius*Math.sin(a), radius*Math.cos(a), 0.0);
 }
 

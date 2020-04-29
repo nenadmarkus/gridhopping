@@ -1,4 +1,4 @@
-importScripts('../gridhopping.js');
+importScripts('gridhopping.js');
 importScripts('polygonize.js');
 importScripts('extensions.js');
 
