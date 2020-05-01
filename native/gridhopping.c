@@ -16,6 +16,8 @@ void interpolate_vertex(real_t borderval, real_t vert1[], real_t val1, real_t ve
 		vert[0] = vert1[0];
 		vert[1] = vert1[1];
 		vert[2] = vert1[2];
+
+		return;
 	}
 
 	if (ABS(borderval-val2) < 0.00001f)
@@ -23,6 +25,8 @@ void interpolate_vertex(real_t borderval, real_t vert1[], real_t val1, real_t ve
 		vert[0] = vert2[0];
 		vert[1] = vert2[1];
 		vert[2] = vert2[2];
+
+		return;
 	}
 
 	real_t a = (borderval - val1) / (val2 - val1);
@@ -532,7 +536,7 @@ int polygonize_grid(real_t (*eval_sdb)(real_t x, real_t y, real_t z), real_t sid
 		int j;
 		for(j=0; j<n; ++j)
 		{
-			int k=1;
+			int k=0;
 
 			while(1)
 			{
