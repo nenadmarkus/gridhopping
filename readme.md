@@ -5,13 +5,13 @@ The core feature of this CAD approach is that you do not have a visual editor fo
 
 ## Contents of the repo
 
-Three different implementations:
+Three different implementations in the folder [implementations](implementations):
 
-* [JavaScript](javascript) (try it at <https://femtocad.gitlab.io>)
-* [C](c)
-* [Go](golang)
+* [JavaScript](implementations/javascript) (try it at <https://femtocad.gitlab.io>)
+* [C](implementations/c)
+* [Go](implementations/golang)
 
-A description of the algorithm running under the hood is available [here](algo.md).
+A description of the algorithm running under the hood is available in the folder [algorithm](algorithm).
 There's also a [license file](license).
 
 ## Contact
