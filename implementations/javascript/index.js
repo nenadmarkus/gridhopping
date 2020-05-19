@@ -1,4 +1,8 @@
-tryit.value = `const solids = [
+tryit.value = `/*
+	More examples at https://femtocad.gitlab.io/examples.html
+*/
+
+const solids = [
 	sphere(0.1),
 	cuboid(0.15, 0.15, 0.15),
 	cone(0.1, 0.2),
@@ -12,6 +16,12 @@ const radius = 0.3;
 
 for (let i=1; i<solids.length; ++i)
 {
+	// apply random rotation around each of the three axes
+	solids[i] = rotate(solids[i], [1, 0, 0], Math.random()*2.0*Math.PI);
+	solids[i] = rotate(solids[i], [0, 1, 0], Math.random()*2.0*Math.PI);
+	solids[i] = rotate(solids[i], [0, 0, 1], Math.random()*2.0*Math.PI);
+
+	// apply deterministically computed translation
 	const a = (i-1)*2.0*Math.PI/(solids.length-1);
 	solids[i] = translate(solids[i], radius*Math.sin(a), radius*Math.cos(a), 0.0);
 }
