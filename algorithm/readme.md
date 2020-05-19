@@ -19,7 +19,7 @@ The basic idea is to define a ray and move along its direction until you find th
 In sphere tracing, the marching step is set to be equal to the (estimated) distance of the current point to the shape.
 The following figure illustrates this in 2D (the surface is drawn in pink):
 
-![Illustration of sphere tracing.](https://i.stack.imgur.com/dFHFY.png "Illustration of sphere tracing.")
+![Illustration of sphere tracing.](sphere-tracing.png "Illustration of sphere tracing.")
 
 This approach greatly speeds up the process of finding the intersection.
 In our case, we emit `N^2` such rays which are parallel.
@@ -34,7 +34,7 @@ Currently, the polygonization of each cell is performed by the [Marching cubes](
 #### Complexity analysis
 
 There is experimental and some theoretical evidence that the complexity of the `gridhopping` method is `O(N^2 log(N))`.
-Preliminary analysis is available in the article "A fast algorithm for generating triangle meshes from signed distance bounds" (by Nenad Markus).
+Preliminary analysis is available [here](algo.html).
 
 ## Acknowledgements and related work
 
