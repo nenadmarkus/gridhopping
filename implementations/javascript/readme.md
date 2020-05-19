@@ -1,3 +1,5 @@
+# [femtoCAD](https://femtocad.gitlab.io)
+
 A JavaScript implementation of the method.
 
 The visualization and user interface for this CAD tool is powered by the capabilities of modern web browsers.
@@ -8,12 +10,12 @@ To test this it locally, do the following:
 
 Alternatively, test it online at [https://femtocad.gitlab.io](https://femtocad.gitlab.io) (yes, the website is hosted at GitLab for more flexibility).
 
-## Examples (also see [here](examples.md))
+## Examples (also see [here](examples.html))
 
 As explained, the algorithm is used to polygonize implicit functions (or signed distance bounds) of the form `F(x, y, z)=0`.
 Note, however, that `F` has to be [Lipschitz continuous](https://en.wikipedia.org/wiki/Lipschitz_continuity) in order to obtain correct results.
 
-In femtoCAD, this function is set by the user by writing a small piece of JavaScript code. For example, the following code defines a sphere with a radius equal to 0.4 centered at the origin:
+In [femtoCAD](https://femtocad.gitlab.io), this function is set by the user by writing a small piece of JavaScript code. For example, the following code defines a sphere with a radius equal to 0.4 centered at the origin:
 
 ```
 return function (x, y, z) {
@@ -22,4 +24,4 @@ return function (x, y, z) {
 }
 ```
 
-More examples can be found [here](examples.md).
+More examples can be found [here](examples.html) (use a web browser for a proper display).
