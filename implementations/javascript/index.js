@@ -37,10 +37,9 @@ const VIEWER = new_viewer(
 );
 
 /*
-
+	(re)build model
 */
 
-//
 var TRIANGLES = null;
 var NORMALS = null;
 var LOCK = false;
@@ -96,7 +95,50 @@ rebuild();
 document.getElementById("render-button").onclick = rebuild;
 
 /*
-	exporter
+	save model code
+*/
+
+const savecodelink = document.createElement('a');
+savecodelink.style.display = 'none';
+document.body.appendChild(savecodelink);
+
+// from <https://stackoverflow.com/questions/5416920/timestamp-to-human-readable-format>
+function get_formated_date()
+{
+	const date = new Date();
+
+	let month = date.getMonth() + 1;
+	let day = date.getDate();
+	let hour = date.getHours();
+	let minutes = date.getMinutes();
+	let seconds = date.getSeconds();
+
+	month = (month < 10 ? "0" : "") + month;
+	day = (day < 10 ? "0" : "") + day;
+	hour = (hour < 10 ? "0" : "") + hour;
+	minutes = (minutes < 10 ? "0" : "") + minutes;
+	seconds = (seconds < 10 ? "0" : "") + seconds;
+
+	return date.getFullYear() + "-" + month + "-" + day + "-" + hour + "-" + minutes + "-" + seconds;
+}
+
+function save_code()
+{
+	const code = tryit.value;
+
+	const timestamp = get_formated_date();
+	const name = "model-" + timestamp + ".js";
+
+	const blob = new Blob([code], {type: "text/plain;charset=utf-8"});
+	savecodelink.href = URL.createObjectURL(blob);
+	savecodelink.download = name;
+	savecodelink.click();
+}
+
+document.getElementById("save-code-button").onclick = save_code;
+
+/*
+	export model
 */
 
 function export_to_stl(triangles)
