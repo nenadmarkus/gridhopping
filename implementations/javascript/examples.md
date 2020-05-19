@@ -1,4 +1,4 @@
-# Examples functions for the Femto CAD tool
+# Examples functions for the femtoCAD tool
 
 An ellipsoid.
 
