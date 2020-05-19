@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "gridhopping.c"
 
@@ -31,11 +32,16 @@ int run(int resolution, char* opath)
 {
 	if (opath!=0)
 	{
-		OUTPUT = fopen(opath, "wb");
-		if (!OUTPUT)
+		if (0 == strcmp(opath, "stdout"))
+			OUTPUT = stdout;
+		else
 		{
-			printf("* failed to open file '%s'", opath);
-			return 0;
+			OUTPUT = fopen(opath, "wb");
+			if (!OUTPUT)
+			{
+				printf("* failed to open file '%s'\n", opath);
+				return 0;
+			}
 		}
 		unsigned char header[80] = {0, 0, 0, 0};
 		fwrite(header, 1, 80, OUTPUT); // header
@@ -50,6 +56,8 @@ int run(int resolution, char* opath)
 		fwrite(&NTRIANGS, 4, 1, OUTPUT);
 		fclose(OUTPUT);
 	}
+	else
+		printf("* the model has %d triangles\n", NTRIANGS);
 
 	return NTRIANGS;
 }
@@ -70,9 +78,6 @@ int main(int argc, char* argv[])
 		opath = argv[2];
 
 	run(resolution, opath);
-
-	if (argc != 3)
-		printf("* the model has %d triangles\n", NTRIANGS);
 
 	return 0;
 }

@@ -1,13 +1,18 @@
-This project contains the implementation of a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it.
-Its main applications are (1) constructive solid geometry (CSG) and (2) generating triangle approximations of 3D fractals.
+This project contains experiments with a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it ([https://femtocad.gitlab.io](https://femtocad.gitlab.io)).
+The main possible applications of the method are (1) constructive solid geometry (CSG) and (2) generating triangle approximations of 3D fractals.
 
-The core feature of this CAD software is that you do not have a visual editor for builidng 3D models, but you write code (JavaScript or C) to describe them.
+The core feature of this CAD approach is that you do not have a visual editor for builidng 3D models, but you write code (JavaScript, C or Go) to describe them.
 
 ## Contents of the repo
 
-* a web-based implementation is in the folder [javascript](javascript) (try it at <https://femtocad.gitlab.io>);
-* a native implementation is in the folder [native](native);
-* a description of the algorithm running under the hood is available [here](algo.md).
+Three different implementations:
+
+* [JavaScript](javascript) (try it at <https://femtocad.gitlab.io>)
+* [C](c)
+* [Go](golang)
+
+A description of the algorithm running under the hood is available [here](algo.md).
+There's also a [license file](license).
 
 ## Contact
 
