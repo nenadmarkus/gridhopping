@@ -12,10 +12,13 @@ a {word-wrap:break-word;}
 <body>
 
 <!--
-	* the below div contains Markdown which is transformed into HTML by marked.js
+	* the below textarea contains Markdown which is transformed into HTML by marked.js and inserted into the content div
 	* furmulas are rendered witk KaTex
 -->
 <div id="content">
+<div>
+
+<textarea id="md" style="display:none;">
 
 # Examples functions for the femtoCAD tool
 
@@ -430,12 +433,12 @@ function logspi(a, b, R)
 return extrusion(logspi(0.1, 0.1, 0.01), 0.1);
 ```
 
-</div>
+</textarea>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-	const content = document.getElementById('content');
-	content.innerHTML = marked(content.innerHTML);
+	const md = document.getElementById('md').value;
+	document.getElementById('content').innerHTML = marked(md);
 </script>
 
 </body>
