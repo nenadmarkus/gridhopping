@@ -92,7 +92,7 @@ function rebuild()
 
 rebuild();
 
-document.getElementById("render-button").onclick = rebuild;
+document.getElementById("build-button").onclick = rebuild;
 
 /*
 	save model code
@@ -206,3 +206,29 @@ document.getElementById("export-button").onclick = function () {
 		link.click();
 	}
 };
+
+/*
+	build model on shift+enter
+*/
+
+const keys = {
+	"shift": false,
+	"enter": false
+}
+
+document.body.addEventListener("keydown", function (event) {
+	if (event.keyCode == 16)
+		keys["shift"] = true;
+	if (event.keyCode == 13)
+		keys["enter"] = true;
+
+	if(keys["shift"]===true && keys["enter"]===true)
+		rebuild();
+})
+
+document.body.addEventListener("keyup", function (event) {
+	if (event.keyCode == 16)
+		keys["shift"] = false;
+	if (event.keyCode == 13)
+		keys["enter"] = false;
+})
