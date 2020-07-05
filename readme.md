@@ -16,7 +16,7 @@ There's also a [license file](license).
 
 ## Contact
 
-Copyright (c) 2020, [Nenad Markus](nenadmarkus.github.io). All rights reserved.
+Copyright (c) 2020, [Nenad Markus](https://nenadmarkus.github.io). All rights reserved.
 
 You can reach me at <nenad.markus@protonmail.com>.
 
