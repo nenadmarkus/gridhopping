@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<title>A fast algorithm for generating triangle meshes from signed distance bounds</title>
-	<meta name="keywords" content="signed distance bounds, marching cubes, sphere tracing, ray marching, gridhopping, femtocad">
+	<meta name="keywords" content="signed distance bounds, marching cubes, sphere tracing, ray marching, gridhopping, lambdaCAD">
 <meta name=viewport content="width=device-width,initial-scale=1">
 <style>
 pre {font: 12px/20px Monaco, monospace;border: 1px solid #CCC;border-radius: 3px;background: #F9F9F9;padding: 10px;color: #555;overflow-x:auto; /* add horizontal scroll to code area, if needed */}
@@ -34,7 +34,7 @@ where $f\_S^{-1}(0)=\\{\mathbf{z}: f\_S(\mathbf{z})=0\\}$.
 We are interested in approximating a shape defined by its signed distance bound into a triangle mesh.
 This post describes one such algorithm.
 
-A demo implementation can be tested at [https://femtocad.gitlab.io](https://femtocad.gitlab.io) and the open-source code is available at [https://github.com/nenadmarkus/gridhopping](https://github.com/nenadmarkus/gridhopping).
+A demo implementation can be tested at [https://lambdacad.gitlab.io](https://lambdacad.gitlab.io) and the open-source code is available at [https://github.com/nenadmarkus/gridhopping](https://github.com/nenadmarkus/gridhopping).
 
 In our case, the polygonization volume is an axis-aligned cube centered at the origin.
 This cube is partitioned into a rectangular grid with $N^3$ cells by subividing each of its sides into $N$ intervals of equal size.

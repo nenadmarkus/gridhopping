@@ -1,4 +1,4 @@
-This project contains experiments with a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it ([https://femtocad.gitlab.io](https://femtocad.gitlab.io)).
+This project contains experiments with a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it ([https://lambdacad.gitlab.io](https://lambdacad.gitlab.io)).
 The main possible applications of the method are (1) constructive solid geometry (CSG) and (2) generating triangle approximations of 3D fractals.
 
 The core feature of this CAD approach is that you do not have a visual editor for builidng 3D models, but you write code (JavaScript, C or Go) to describe them.
@@ -7,7 +7,7 @@ The core feature of this CAD approach is that you do not have a visual editor fo
 
 Three different implementations in the folder [implementations](implementations):
 
-* [JavaScript](implementations/javascript) (try it at <https://femtocad.gitlab.io>)
+* [JavaScript](implementations/javascript) (try it at <https://lambdacad.gitlab.io>)
 * [C](implementations/c)
 * [Go](implementations/golang)
 

@@ -1,5 +1,5 @@
 tryit.value = `/*
-	More examples at https://femtocad.gitlab.io/examples.html
+	More examples at https://lambdacad.gitlab.io/examples.html
 */
 
 const solids = [
