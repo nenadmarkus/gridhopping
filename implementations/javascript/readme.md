@@ -10,7 +10,7 @@ To test this it locally, do the following:
 
 Alternatively, test it online at [https://femtocad.gitlab.io](https://femtocad.gitlab.io) (yes, the website is hosted at GitLab for more flexibility).
 
-## Examples (also see [here](examples.html))
+## Examples (also see [here](examples.md))
 
 As explained, the algorithm is used to polygonize implicit functions (or signed distance bounds) of the form `F(x, y, z)=0`.
 Note, however, that `F` has to be [Lipschitz continuous](https://en.wikipedia.org/wiki/Lipschitz_continuity) in order to obtain correct results.
