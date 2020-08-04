@@ -24,3 +24,16 @@ real_t sde_scene(real_t x, real_t y, real_t z)
 {
 	return sde_sierpinski_tetrahedron(x, y, z);
 }
+
+#ifdef SURF_CRAWL
+// not used for gridhopping
+int get_nseeds()
+{
+	return 1;
+}
+real_t* get_seed_ptr()
+{
+	static real_t SEEDS[] = {-0.4030761718750000, -0.0378417968750000, 0.0466308593750000};
+	return &SEEDS[0];
+}
+#endif

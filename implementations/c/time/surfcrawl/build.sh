@@ -1,0 +1,1 @@
+c++ main.cpp $1 -Dreal_t=double -lm -O3 -o exe -DSURF_CRAWL

@@ -23,3 +23,16 @@ real_t sde_scene(real_t x, real_t y, real_t z)
 	//
 	return (MIN(sqrtf((x-x1)*(x-x1)+(y-y1)*(y-y1)+(z-z1)*(z-z1)), sqrtf((x-x2)*(x-x2)+(y-y2)*(y-y2)+(z-z2)*(z-z2))) - 0.3)/4.0/scale;
 }
+
+#ifdef SURF_CRAWL
+// not used for gridhopping
+int get_nseeds()
+{
+	return 1;
+}
+real_t* get_seed_ptr()
+{
+	static real_t SEEDS[] = {-0.4572753906250000, -0.0173339843750000, -0.0383300781250000};
+	return &SEEDS[0];
+}
+#endif
