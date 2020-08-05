@@ -179,6 +179,18 @@ return function (x, y, z)
 };
 ```
 
+A surface obtained by rotating a [teardrop curve](https://math.stackexchange.com/questions/1447021/function-to-describe-teardrop-shape/1678533):
+
+```
+return function (x, y, z) {
+	x=3*x; y=3*y; z=3*z; // rescale to fit 1x1x1 box
+	const r = Math.sqrt(x*x + y*y);
+	const L = 150;
+
+	return ( 4*r*r - (1-z)*(1-z)*(1-z)*(1+z) )/L;
+}
+```
+
 A [gyroid](https://en.wikipedia.org/wiki/Gyroid).
 
 ```
