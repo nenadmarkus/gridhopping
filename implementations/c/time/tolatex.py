@@ -25,15 +25,19 @@ template = '''\\documentclass{standalone}
 	xmode=log, log basis x=2,
 	legend pos=north west
 ]
-		\\addplot[color=black, line width=1, mark=o]
+		\\addplot[color=red, line width=1]
 			coordinates {
 				%s
 			};
-		\\addplot[color=black, line width=1, mark=x]
+		\\addplot[color=green, line width=1]
 			coordinates {
 				%s
 			};
-		\\legend{%s,%s}
+		\\addplot[color=blue, line width=1]
+			coordinates {
+				%s
+			};
+		\\legend{%s,%s,%s}
 \\end{axis}
 \\end{tikzpicture}
 \\end{document}'''
@@ -50,7 +54,7 @@ def get_rt(data):
 	#
 	return rt
 
-result = template % (get_rt(data["fast"]), get_rt(data["slow"]), "fast", "slow")
+result = template % (get_rt(data["gh"]), get_rt(data["sc"]), get_rt(data["mc"]), "gh", "sc", "mc")
 
 #
 #

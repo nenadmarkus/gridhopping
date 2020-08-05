@@ -9,3 +9,11 @@ python tolatex.py results/knot.time.json results/knot.tikz
 python tolatex.py results/gen2.time.json results/gen2.tikz
 python tolatex.py results/primitives.time.json results/primitives.tikz
 python tolatex.py results/sierp.time.json results/sierp.tikz
+
+cd results/
+pdflatex knot.tikz
+pdflatex gen2.tikz
+pdflatex primitives.tikz
+pdflatex sierp.tikz
+
+rm *.aux *.log

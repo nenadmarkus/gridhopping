@@ -30,6 +30,7 @@ void emit_triangle(real_t v1[], real_t v2[], real_t v3[])
 	++NTRIANGS;
 }
 
+extern "C" {
 int run(int resolution, char* opath)
 {
 	if (opath!=0)
@@ -62,6 +63,7 @@ int run(int resolution, char* opath)
 		printf("* the model has %d triangles\n", NTRIANGS);
 
 	return NTRIANGS;
+}
 }
 
 int main(int argc, char* argv[])
