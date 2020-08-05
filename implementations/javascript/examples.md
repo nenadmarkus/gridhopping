@@ -185,7 +185,7 @@ A surface obtained by rotating a [teardrop curve](https://math.stackexchange.com
 return function (x, y, z) {
 	x=3*x; y=3*y; z=3*z; // rescale to fit 1x1x1 box
 	const r = Math.sqrt(x*x + y*y);
-	const L = 150;
+	const L = 1.0 + 75*Math.abs(r);
 
 	return ( 4*r*r - (1-z)*(1-z)*(1-z)*(1+z) )/L;
 }
@@ -372,6 +372,16 @@ const l = line2d(
 );
 
 return extrusion(l, 0.5);
+```
+
+```
+// https://en.wikipedia.org/wiki/Lemniscate_of_Gerono
+function lemn(x, y) {
+	x*=3; y*=3;
+	return (x*x*x*x - x*x + y*y)/3;
+}
+
+return extrusion(lemn, 0.5);
 ```
 
 ```
