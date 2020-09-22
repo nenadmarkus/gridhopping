@@ -22,21 +22,6 @@ wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/implementa
 wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/implementations/javascript/meshviz/viewer.js -O public/meshviz/viewer.js
 wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/implementations/javascript/meshviz/OrbitControls.js -O public/meshviz/OrbitControls.js
 
-# description of the algorithm
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/algo.html -O public/algo.html
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/boxapprox.png -O public/boxapprox.png
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/scenes.png -O public/scenes.png
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/times-logplot.png -O public/times-logplot.png
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/sphere-tracing.png -O public/sphere-tracing.png
-
-# about Lipschitz continuity
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/lipschitz-and-sphere-tracing.html -O public/lipschitz-and-sphere-tracing.html
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/l3.png -O public/l3.png
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/algorithm/l4.png -O public/l4.png
-
-# additional examples
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/implementations/javascript/examples.md -O public/examples.md
-wget https://raw.githubusercontent.com/nenadmarkus/gridhopping/master/implementations/javascript/examples.html -O public/examples.html
-
 # create zipped github code
+sed -i 's/open-source code/open-source code (<a href="code.zip">code.zip<\/a>)/' public/index.html
 wget https://github.com/nenadmarkus/gridhopping/archive/master.zip -O public/code.zip

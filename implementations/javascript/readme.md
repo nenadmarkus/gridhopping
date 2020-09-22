@@ -1,6 +1,8 @@
-# [lambdaCAD](https://lambdacad.gitlab.io)
+A JavaScript implementation of the method: [gridhopping.js](gridhopping.js).
 
-A JavaScript implementation of the method.
+You can test how it works in the provided CAD tool.
+
+## [lambdaCAD](https://lambdacad.gitlab.io)
 
 The visualization and user interface for this CAD tool is powered by the capabilities of modern web browsers.
 To test this it locally, do the following:
@@ -10,7 +12,7 @@ To test this it locally, do the following:
 
 Alternatively, test it online at [https://lambdacad.gitlab.io](https://lambdacad.gitlab.io) (yes, the website is hosted at GitLab for more flexibility).
 
-## Examples (also see [here](examples.md))
+### Examples (also see [here](examples.md))
 
 As explained, the algorithm is used to polygonize implicit functions (or signed distance bounds) of the form `F(x, y, z)=0`.
 Note, however, that `F` has to be [Lipschitz continuous](https://en.wikipedia.org/wiki/Lipschitz_continuity) in order to obtain correct results.
