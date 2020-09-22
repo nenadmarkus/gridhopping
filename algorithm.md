@@ -34,7 +34,7 @@ Currently, the polygonization of each cell is performed by the [Marching cubes](
 #### Complexity analysis
 
 There is experimental and some theoretical evidence that the complexity of the `gridhopping` method is `O(N^2 log(N))`.
-Preliminary analysis is available [here](algo.html).
+Preliminary analysis is available [here](https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/).
 
 ## Acknowledgements and related work
 

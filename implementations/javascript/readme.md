@@ -24,4 +24,4 @@ return function (x, y, z) {
 }
 ```
 
-More examples can be found [here](examples.html) (use a web browser for a proper display).
+More examples can be found [here](examples.md).
