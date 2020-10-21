@@ -8,11 +8,12 @@ Some example scenes/models that you can produce are given in the following image
 
 ## Contents of the repo
 
-Three different implementations in the folder [implementations](implementations):
+Four different implementations in the folder [implementations](implementations):
 
 * [JavaScript](implementations/javascript) (try it at <https://lambdacad.gitlab.io>)
 * [C](implementations/c)
 * [Go](implementations/golang)
+* [Python](implementations/python)
 
 A description of the algorithm running under the hood is available [here](algorithm.md) (also see [this post](https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/)).
 
