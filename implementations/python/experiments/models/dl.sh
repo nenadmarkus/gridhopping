@@ -1,5 +1,3 @@
-mkdir -p models
-
 wget https://thingiverse-production-new.s3.amazonaws.com/assets/50/dd/4d/f6/05/cuddling-cats.stl -O cats.stl
 wget https://thingiverse-production-new.s3.amazonaws.com/assets/b2/79/70/4f/96/Bunny.stl -O bunny.stl
 wget https://thingiverse-production-new.s3.amazonaws.com/assets/57/c0/cb/4d/f8/squirrel.stl -O squirrel.stl
