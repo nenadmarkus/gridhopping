@@ -63,13 +63,22 @@ def run(sde_fun, n):
 #
 #
 
+MCLIB = None
+
 def polygonize_cells(filename, cells, vals, libpath="mc.c"):
 	#
-	os.system('cc %s -O3 -fPIC -shared -o mclib.so -Dreal_t=float' % libpath)
-	mclib = ctypes.cdll.LoadLibrary('./mclib.so')
-	os.system('rm mclib.so')
+	if cells.dtype == numpy.float32:
+		realt = 'float'
+	else:
+		realt = 'double'
 	#
-	mclib.run(
+	global MCLIB
+	if MCLIB is None:
+		os.system('cc %s -O3 -fPIC -shared -o mclib.so -Dreal_t=%s' % (libpath, realt))
+		MCLIB = ctypes.cdll.LoadLibrary('./mclib.so')
+		os.system('rm mclib.so')
+	#
+	MCLIB.run(
 		ctypes.c_void_p(numpy.array(filename.encode("utf8")).ctypes.data),
 		ctypes.c_void_p(cells.ctypes.data),
 		ctypes.c_void_p(vals.ctypes.data),

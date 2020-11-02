@@ -36,6 +36,7 @@ int run(char* filename, real_t cells[], real_t vals[], int ncells)
 	int i;
 
 	OUTPUT = fopen(filename, "wb");
+	NTRIANGS = 0;
 
 	// write dummy header first
 	unsigned char header[80] = {0, 0, 0, 0};
