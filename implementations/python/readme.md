@@ -5,3 +5,5 @@ You can use the script `test.py` to see how the method compares to the usual `O(
 	python3 test.py 512
 
 Note that the C implementation is faster for simpler models such as a sphere in `test.py`. However, the difference becomes large in favor of the vectorized version once we start dealing with SDFs represented by NNs or Fourier features.
+
+The code for a more detailed experimental analysis is available [here](experiments).
