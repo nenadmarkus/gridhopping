@@ -1,0 +1,16 @@
+{
+	"cuda": true,
+	"loaderdef": "loader",
+	"loaderparams": {
+		"sampling": "#1",
+		"meshpath": "../models/bunny.stl",
+		"npoints": 262144,
+		"bsize": 512
+	},
+	"niters": 200000,
+	"nloaders": 8,
+	"modeldef": "nn.py",
+	"savedir": "learned-models/bunny",
+	"savefreq": 1024,
+	"learnrate": 1e-4
+}
