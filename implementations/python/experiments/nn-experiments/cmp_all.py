@@ -31,7 +31,7 @@ for m in M:
 		"time": []
 	}
 	for r in R:
-		ght, mct = cmp.run(m, r, usecuda=True)
+		ght, mct = cmp.run(m, r, usecuda=False)
 		gh["resolution"].append(r)
 		gh["time"].append(ght)
 		mc["resolution"].append(r)

@@ -57,7 +57,8 @@ def get(meshpath, npts):
 	return sample_points(mesh, npts)
 
 if __name__ == "__main__":
-	points, sdf = get("chair.obj", 250000)
+	import sys
+	points, sdf = get(sys.argv[1], 25000)
 	colors = numpy.zeros(points.shape)
 	colors[sdf < 0, 2] = 1
 	colors[sdf > 0, 0] = 1
