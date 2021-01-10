@@ -15,7 +15,8 @@ Four different implementations in the folder [implementations](implementations):
 * [Go](implementations/golang)
 * [Python](implementations/python)
 
-A description of the algorithm running under the hood is available [here](algorithm.md) (also see [this post](https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/)).
+A description of the algorithm running under the hood is available [here](algorithm.md).
+Also see [this post](https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/) for a more detailed analysis.
 
 There's also a [license file](license).
 
