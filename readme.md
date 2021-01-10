@@ -25,4 +25,4 @@ Copyright (c) 2020, [Nenad Markus](https://nenadmarkus.github.io). All rights re
 
 You can reach me at <nenad.markus@protonmail.com>.
 
-If you like my work, consider donating: [EUR](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4WNYJAYWPJX56&curency_code=EUR) or BTC (request address by email).
+If you like my work, consider donating: [EUR](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4WNYJAYWPJX56&curency_code=EUR).
