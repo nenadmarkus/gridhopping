@@ -38,15 +38,15 @@ Preliminary analysis is available [here](https://nenadmarkus.github.io/p/fast-al
 
 ## Acknowledgements and related work
 
-The development of this software started somewhere around May 2019.
+The development of this software started sometime in the first part of 2019.
 Until August, I thought that the `gridhopping` algorithm was original (invented for this project).
 However, it turns our that there is a large literature on how to speed-up marching cubes and some approches are quite similar.
 See the paper "A survey of the marching cubes algorithm" by Newman and Li for an overview.
-Also, a subsequent analysis of various internet projects revealed that Cristopher Olaf developed a similar approach around 2011 for his [ImplicitCAD](https://github.com/colah/ImplicitCAD).
+Also, a subsequent analysis of various internet projects revealed that Christopher Olah developed a similar approach around 2011 for his [ImplicitCAD](https://github.com/colah/ImplicitCAD).
 However, my analysis of its source code on [GitHub](https://github.com/colah/ImplicitCAD) indicates that its algorithm has `N^3` complexity
 (although Cristopher discussed improvements that would lead to something like `N^2` complexity [here](https://christopherolah.wordpress.com/2011/11/06/manipulation-of-implicit-functions-with-an-eye-on-cad) ).
 I could be wrong though as I am not proficient in Haskel.
-Nevertheless, I acknowledge this work and state that `gridhopping` was develpped independently.
+Nevertheless, I acknowledge this work and state that `gridhopping` was developped independently.
 
 Some other projects that inspired this work:
 

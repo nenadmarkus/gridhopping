@@ -4,7 +4,6 @@ import time
 import os
 import sys
 import json
-import cv2
 import numpy
 
 import torch

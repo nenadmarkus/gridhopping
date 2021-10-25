@@ -4,6 +4,4 @@ trimesh
 pyrender
 scikit-image
 sklearn
-opencv-python
 mesh-to-sdf
-

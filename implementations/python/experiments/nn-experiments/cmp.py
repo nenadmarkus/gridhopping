@@ -51,4 +51,4 @@ if __name__ == "__main__":
 	#torch.set_default_tensor_type(torch.DoubleTensor)
 	meshpath = sys.argv[1]
 	gridsize = int(sys.argv[2])
-	run(meshpath, gridsize, usecuda=True, view=False)
+	run(meshpath, gridsize, usecuda=False, view=False)
