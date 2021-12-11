@@ -4,6 +4,7 @@
 <head>
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<meta content="utf-8" http-equiv="encoding">
+	<meta name=viewport content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" href="styles.css">
 	<title>lambdaCAD</title>
 	<meta name="description" content="A tiny in-browser CAD tool.">
@@ -11,18 +12,38 @@
 </head>
 <body>
 
-	<h1>lambdaCAD</h1>
+	<h1>
+		lambdaCAD (<a href="https://github.com/nenadmarkus/gridhopping">source</a>,
+			<a href="https://arxiv.org/abs/2111.05778">paper</a>,
+			<a href="https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/">blog post</a>)
+	</h1>
 		<p>
-			This is a tiny in-browser CAD tool based on the <code>gridhopping</code> algorithm
+			This is a tiny in-browser CAD tool based on the modified sphere tracing algorithm algorithm
+			(we call it <code>gridhopping</code>).
+			Edit the code and hit the build button (or shift+enter) to generate a shape.
 		</p>
-		<ul>
-			<li>open-source code: <a href="https://github.com/nenadmarkus/gridhopping">https://github.com/nenadmarkus/gridhopping</a></li>
-			<li>explanation of the algorithm: <a href="https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/">https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh/</a></li>
-		</ul>
-		<p>
-			Edit the code below the canvas and hit the build button (or shift+enter) to generate a shape.
-		</p>
-		<div id="VIEWPORT" style="width:100%;height:512px;"></div>
+		<div class="container">
+		<div class="element">
+		<div id="VIEWPORT" style="height: 512px; width: 100%;"></div>
+		<div>
+			size: <input type="number" id="size" style="width:10%;">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			resolution: <input type="number" id="resolution" style="width:10%;">
+		</div>
+		</div>
+		<div class="element">
+		<textarea spellcheck="false" id="tryit" rows="29" style="width: 95%;resize: none;"></textarea>
+		<div style="text-align: center;">
+			<button class="button-style" id="build-button">Build and render</button>
+			<button class="button-style" id="save-code-button">Save code</button>
+			<button class="button-style" id="export-button">Export to STL</button>
+		</div>
+		<p id="log"></p>
+		</div>
+		</div>
+		<!--
+		<div style="text-align: center;">
+		<div id="VIEWPORT" style="height: 512px;"></div>
 		<div style="text-align: center">
 			<p>
 			size: <input type="number" id="size">
@@ -30,13 +51,15 @@
 			resolution: <input type="number" id="resolution">
 			</p>
 		</div>
-		<textarea spellcheck="false" id="tryit" rows="29"></textarea>
-		<div style="text-align: center">
+		<textarea spellcheck="false" id="tryit" rows="29" style="width: 95%;resize: none;"></textarea>
+		<div style="text-align: center;">
 			<button class="button-style" id="build-button">Build and render</button>
 			<button class="button-style" id="save-code-button">Save code</button>
 			<button class="button-style" id="export-button">Export to STL</button>
 		</div>
 		<p id="log"></p>
+		</div>
+		-->
 
 		<div id="stl-download-popup" class="modal">
 			<div class="modal-content">

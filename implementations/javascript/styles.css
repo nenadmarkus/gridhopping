@@ -1,12 +1,11 @@
 body {
-	font: 14px/20px sans-serif; /* Verdana */
-	max-width: 800px;
+	font: 14px/20px sans-serif;
+	width: 90%;
 	margin: 0 auto;
-	padding: 50px 50px 200px 50px;
 }
   
 pre, code, textarea {
-	font: 14px/20px Monaco, monospace;
+	font: monospace;
 	border: 1px solid #CCC;
 	border-radius: 3px;
 	background: #F9F9F9;
@@ -17,21 +16,38 @@ pre, code, textarea {
 
 pre, textarea {
 	padding: 10px;
-	width: 100%;
+
 }
 
 pre {
 	overflow-x:auto; /* horizontal scroll to code area, if needed */
 }
 
-/*
-textarea {
-	height: 200px;
-}
-*/
-
 textarea:focus {
 	outline: none;
+}
+
+/*
+	
+*/
+
+.container {
+	display: flex;
+}
+
+.element {
+	text-align: center;
+	flex: 50%;
+}
+
+/* https://stackoverflow.com/questions/18752935/how-to-change-the-css-style-for-phone-and-desktop/18753001 */
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+	.container {
+		display: inline;
+	}
+	.element {
+		display: inline;
+	}
 }
 
 /*
@@ -85,12 +101,9 @@ textarea:focus {
 */
 
 .button-style {
-	-moz-box-shadow:inset 0px 1px 3px 0px #91b8b3;
-	-webkit-box-shadow:inset 0px 1px 3px 0px #91b8b3;
+	width: 170px;
 	box-shadow:inset 0px 1px 3px 0px #91b8b3;
 	background-color:#768d87;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
 	border-radius:5px;
 	border:1px solid #566963;
 	display:inline-block;
