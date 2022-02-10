@@ -1,4 +1,4 @@
-This project contains experiments with a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it ([https://lambdacad.gitlab.io](https://lambdacad.gitlab.io)).
+This project contains experiments with a method for fast polygonization of signed distance bounds and a tiny CAD tool based on it ([LambdaCAD](https://nenadmarkus.com/lambda)).
 The main possible applications of the method are (1) constructive solid geometry (CSG) and (2) generating triangle approximations of 3D fractals.
 
 The core feature of this CAD approach is that you do not have a visual editor for builidng 3D models, but you write code (JavaScript, C or Go) to describe them.
@@ -10,7 +10,7 @@ Some example scenes/models that you can produce are given in the following image
 
 Four different implementations in the folder [implementations](implementations):
 
-* [JavaScript](implementations/javascript) (try it at <https://lambdacad.gitlab.io>)
+* [JavaScript](implementations/javascript) (try it at <https://nenadmarkus.com/lambda>)
 * [C](implementations/c)
 * [Go](implementations/golang)
 * [Python](implementations/python)
@@ -25,5 +25,3 @@ There's also a [license file](license).
 Copyright (c) 2020, [Nenad Markus](https://nenadmarkus.github.io). All rights reserved.
 
 You can reach me at <nenad.markus@protonmail.com>.
-
-If you like my work, consider donating: [EUR](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=4WNYJAYWPJX56&curency_code=EUR).

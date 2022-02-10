@@ -1,4 +1,4 @@
-The [lambdaCAD](https://lambdacad.gitlab.io) tool comes with a relatively large pool of built-in funcitonality for generating and combining primitives, and basic operations on shapes, such as scaling and rotation.
+The [LambdaCAD](https://nenadmarkus.com/lambda) tool comes with a relatively large pool of built-in funcitonality for generating and combining primitives, and basic operations on shapes, such as scaling and rotation.
 The following examples demonstrate some of these capabilities.
 
 ## Basic operations
@@ -82,7 +82,7 @@ While we can make interesting shapes by combining the basic operations and primi
 The reason could be speed as it can be faster to evaluate a custom bound than a combined one.
 The other reason is that some shapes are difficult to obtain by combining simpler shapes.
 
-Under the hood, [lambdaCAD](https://lambdacad.gitlab.io) requires a function `f` that takes a 3D position of a point as an argument and computes a distance bound to its associated shape.
+Under the hood, [LambdaCAD](https://nenadmarkus.com/lambda) requires a function `f` that takes a 3D position of a point as an argument and computes a distance bound to its associated shape.
 The basic primitives and operations do just that in a functional way.
 However, you can explicitly write the distance bounds yourself.
 Some examples follow.
