@@ -1,0 +1,58 @@
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.142000)(96.000000, 0.090000)(128.000000, 0.128000)(192.000000, 0.229000)(256.000000, 0.404000)(384.000000, 1.038000)(512.000000, 1.905000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.022000)(96.000000, 0.072000)(128.000000, 0.138000)(192.000000, 0.459000)(256.000000, 1.077000)(384.000000, 3.693000)(512.000000, 8.765000)
+			};
+		\legend{\texttt{ghop},\texttt{enum}}
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.060000)(96.000000, 0.075000)(128.000000, 0.108000)(192.000000, 0.235000)(256.000000, 0.436000)(384.000000, 1.103000)(512.000000, 2.253000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.023000)(96.000000, 0.071000)(128.000000, 0.142000)(192.000000, 0.470000)(256.000000, 1.105000)(384.000000, 3.726000)(512.000000, 8.842000)
+			};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.073000)(96.000000, 0.106000)(128.000000, 0.151000)(192.000000, 0.293000)(256.000000, 0.505000)(384.000000, 1.181000)(512.000000, 2.235000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.022000)(96.000000, 0.068000)(128.000000, 0.141000)(192.000000, 0.470000)(256.000000, 1.104000)(384.000000, 3.706000)(512.000000, 8.756000)
+			};
+\end{axis}
+\end{tikzpicture}

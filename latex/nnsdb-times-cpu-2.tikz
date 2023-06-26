@@ -1,0 +1,57 @@
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.201000)(96.000000, 0.389000)(128.000000, 0.738000)(192.000000, 1.722000)(256.000000, 3.261000)(384.000000, 8.366000)(512.000000, 17.258000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.126000)(96.000000, 0.423000)(128.000000, 1.002000)(192.000000, 3.393000)(256.000000, 7.629000)(384.000000, 26.501000)(512.000000, 63.645000)
+			};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.177000)(96.000000, 0.390000)(128.000000, 0.768000)(192.000000, 1.864000)(256.000000, 3.567000)(384.000000, 9.102000)(512.000000, 19.336000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.121000)(96.000000, 0.464000)(128.000000, 1.033000)(192.000000, 3.478000)(256.000000, 7.617000)(384.000000, 26.181000)(512.000000, 59.055000)
+			};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis} [
+	ymode=log,
+	xlabel={Resolution},
+	ylabel={Elapsed time [s]},
+	xmin=64, xmax=512,
+	xmode=log, log basis x=2,
+	legend pos=north west
+]
+		\addplot[color=red, line width=1]
+			coordinates {
+				(64.000000, 0.100000)(96.000000, 0.203000)(128.000000, 0.441000)(192.000000, 0.901000)(256.000000, 1.726000)(384.000000, 4.660000)(512.000000, 9.272000)
+			};
+		\addplot[color=blue, line width=1]
+			coordinates {
+				(64.000000, 0.113000)(96.000000, 0.435000)(128.000000, 0.893000)(192.000000, 3.030000)(256.000000, 7.206000)(384.000000, 25.092000)(512.000000, 59.058000)
+			};
+\end{axis}
+\end{tikzpicture}
