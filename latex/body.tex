@@ -8,6 +8,8 @@
 \usepackage{tikz}
 \usepackage{hyperref}
 \usepackage{flushend} % references two column leveling
+\usepackage{authblk}
+\usepackage{algorithm}
 
 \usepackage[margin=0.75in]{geometry}
 
@@ -21,7 +23,7 @@
   basicstyle=\ttfamily\tiny,
   breaklines=false,
   tabsize=2,
-  keywords={function, return, var, let, const, for, while, if, break, true},
+  keywords={int, float, function, return, var, let, const, for, while, if, break, true},
   keywordstyle=\color{blue}\bfseries,
   ndkeywords={class, export, boolean, throw, implements, import, this},
   ndkeywordstyle=\color{darkgray}\bfseries,
@@ -35,70 +37,89 @@
   morestring=[b]"
 }
 
-%\title{A fast algorithm for extracting triangle meshes from signed distance bounds}
-\title{Theoretical and empirical analysis of a fast algorithm for extracting polygons from signed distance bounds}
-\author{Nenad Marku\v{s}\footnote{\url{https://nenadmarkus.com}}}
+\title{Theoretical and Empirical Analysis of a Fast Algorithm for Extracting Polygons From Signed Distance Bounds}
+\author{Nenad Marku\v{s}\thanks{nenad.markus@fer.hr}}
+\author{Mirko Su\v{z}njevi\'{c}\thanks{mirko.suznjevic@fer.hr}}
+\affil{University of Zagreb Faculty of Electrical Engineering and Computing\\Unska 3, 10000 Zagreb, Croatia}
+\renewcommand\Authand{ \hspace{2cm} }
 \date{}
 
 \begin{document}
 	\maketitle
 
 	\begin{abstract}
-		We investigate an asymptotically fast method for transforming signed distance bounds into polygon meshes.
-		This is achieved by combining sphere tracing (also known as ray marching) and one of the traditional polygonization schemes (e.g., Marching cubes).
-		Let us call this approach Gridhopping.
-		We provide theoretical and experimental evidence that it is of the $O(N^2\log N)$ computational complexity for a polygonization grid with $N^3$ cells.
-		The algorithm is tested on both a set of primitive shapes as well as signed distance fields generated from point clouds by machine learning.
-		Given its speed, simplicity and portability, we argue that it could prove useful during the modelling stage as well as in shape compression for storage.
+        Recently there has been renewed interest in signed distance bound representations due to their unique properties for 3D shape modelling.
+        This is especially the case for deep learning-based bounds.
+        However, it is beneficial to work with polygons in most computer-graphics applications.
+		Thus, in this paper we introduce and investigate an asymptotically fast method for transforming signed distance bounds into polygon meshes.
+		This is achieved by combining the principles of sphere tracing (or ray marching) with traditional polygonization techniques, such as Marching Cubes.
+		We provide theoretical and experimental evidence that this approach is of the $O(N^2\log N)$ computational complexity for a polygonization grid with $N^3$ cells.
+		The algorithm is tested on both a set of primitive shapes as well as signed distance bounds generated from point clouds by machine learning (and represented as neural networks).
+		Given its speed, implementation simplicity and portability, we argue that it could prove useful during the modelling stage as well as in shape compression for storage.
 
 		The code is available here: \url{https://github.com/nenadmarkus/gridhopping}.
 	\end{abstract}
 
+    \textbf{Keywords}: sphere tracing, marching cubes, signed distance bounds, neural shape representations
+
 	\section{Introduction}
-		A signed distance field (SDF) for some shape $S$ is a function $f_S:\mathbb{R}^3\rightarrow\mathbb{R}$ such that $f_S(x, y, z)$ returns a geometric distance from the point $(x, y, z)\in\mathbb{R}^3$ to $S$.
+  		A Signed Distance Field (SDF) for some shape $S$ is a function $f_S:\mathbb{R}^3\rightarrow\mathbb{R}$ such that $f_S(x, y, z)$ returns a geometric distance from the point $(x, y, z)\in\mathbb{R}^3$ to $S$.
 		If $(x, y, z)$ is within $S$, then the returned distance is negative.
 		In practice we often cannot obtain the exact distance to the shape, but work with distance bounds that underestimate the distance some of the time and never overestimate it.
-		This enables us to efficiently represent a larger class ofshapes.
-
-		J. C. Hart \cite{Hart94spheretracing} (see also \cite{HartEtAl89rtfractals}) uses the definition that $f_S$ is a signed distance bound (SDB) of $S$ if and only if for all $\mathbf{x}\in\mathbb{R}^3$ we have
+		This enables us to efficiently represent a larger class of shapes.
+        J. C. Hart \cite{Hart94spheretracing} (see also \cite{HartEtAl89rtfractals}) uses the definition that $f_S$ is a signed distance bound (SDB) of $S$ if and only if for all $\mathbf{x}\in\mathbb{R}^3$ we have
 		$$
 			\vert f_S(\mathbf{x})\vert\leq
 			\min_{\mathbf{y}\in f_S^{-1}(0)}\vert\vert\mathbf{x} - \mathbf{y}\vert\vert_2
 		$$
 		where $f_S^{-1}(0)=\{\mathbf{z}: f_S(\mathbf{z})=0\}$.
 		The earlier mentioned sign rule applies to the interior of $S$.
-		Such representations are interesting, due to cerain properties such as continuity, for generative modelling \cite{GenShapeCVPR2019,DeepShapeCVPR2019}, shape recovery from point clouds and noisy measurements \cite{ShapeFromPtCould,SecretsOfWildSDFs2021}, compression \cite{davies2020overfit}, etc.
-
-		We are interested in transforming a shape defined by its signed distance bound into a polygon mesh\footnote{The inverse process has been studied more extensively, e.g., \cite{DoubleLayerSDF,GenShapeCVPR2019}}.
-		Polygon (triangle) meshes are the usual shape representation used in computer games and virtual worlds, augmented and virtual reality due to the consideral availability of hardware and software that facilitates their modelling and rendering.
-		Several applications of SDBs that immediately come to mind are:
+        It should be noted that the term SDF is often used in the literature even though SDB is more appropriate \cite{Hart94spheretracing,HartEtAl89rtfractals}.
+  
+        Signed distance bound representations show significant potential due to their rendering speed, storage efficiency, implementation simplicity and shape distribution modelling capabilities.
+        They are powerful tools which are used in computer graphics, simulation, and medical imaging domains.
+  		Here are some typical applications:
 		\begin{itemize}
 			\item
-				shape compression --- it may be more storage-efficient to store a signed distance field (e.g., represented by a small neural network \cite{davies2020overfit}) than as a triangle mesh;
+				shape compression --- it may be more storage-efficient to store a signed distance bound (e.g., represented by a small neural network \cite{davies2020overfit}) than as a triangle mesh;
 			\item
-				statistical shape representations --- sampling from such a representation \cite{GenShapeCVPR2019} can potentially help add variety to virtual worlds;
+				statistical shape representations for generative modelling --- sampling from such a representation \cite{GenShapeCVPR2019,DeepShapeCVPR2019} can potentially help add variety to virtual worlds;
+            \item
+                shape recovery from point clouds and noisy measurements \cite{ShapeFromPtCould,SecretsOfWildSDFs2021};
 			\item
 				shape manipulation --- such as in the paper by Hao et al. \cite{hao2020dualsdf};
 			\item
-				CAD modelling
+				computer-aided design (CAD).
 		\end{itemize}
-		Thus, it is certainly of interest to study the process of converting a signed distance bound into a polygon mesh.
-		A short overview of the algorithms is given in the next section.
+  		
+        In most graphics applications (e.g., classical 3D game engines), due to GPU hardware specifics and well-developed prior practices, it is beneficial to work with polygons even though some assets are encoded as SDBs.  
+        Therefore, converting a signed distance bound into a polygon mesh warrants investigation\footnote{The inverse process has been studied more extensively, e.g., \cite{DoubleLayerSDF,GenShapeCVPR2019}}.
 
-	\section{From distance bounds to polygon meshes}\label{sec:overview}
-		In our case, the polygonization volume is an axis-aligned cube centered at the origin.
-		Without loss of generality, let us assume that the cube is a unit cube, i.e., its sides have length equal to $1$.
+        The objective of this paper is to present and evaluate a method for transforming signed distance bounds into polygon meshes.
+        The contributions are:
+        \begin{enumerate}
+            \item we describe a fast algorithm for polygonizing SDBs based on sphere tracing (ray marching),
+            \item we theoretically show that this algorithm is asymptotically faster than the obvious approaches (e.g., Marching cubes \cite{LorensenCline87marchingcubes} over the whole grid),
+            \item we empirically confirm this in practice for signed distance bounds encoded with deep neural networks.
+        \end{enumerate}
+
+		The next section provides context, basic definitions and related prior work. The description of our method and its analysis/comparisons follows after that.
+
+	\section{Basic definitions and related work}\label{sec:overview}
+        In our case, the polygonization volume is an axis-aligned cube centered at the origin.
+		The shape represented by its SDB is withing this cube.
 		This cube is partitioned into a rectangular grid with $N^3$ cells by subividing each of its sides into $N$ intervals of equal size.
 		If we assume we are not dealing with fractals, only $O(N^2)$ cells asymptotically contain the surface of our shape.
 		Thus, the only triangles that need to be computed are passing through these cells.
-		This puts the lower bound on the complexity of the triangulization algorithm.
+		This puts the lower bound on the complexity of the triangulation algorithm.
 		However, the challenge is to isolate just these $O(N^2)$ cells.
-		Obviously, the simplest solution, which leads to $O(N^3)$ complexity, is to check each of the $N^3$ cells.
-		This process is called \textbf{enumeration} \cite{unchainedgeometry} and for some purposes it is too slow.
+
+		The simplest solution, which leads to $O(N^3)$ complexity, is to check each of the $N^3$ cells.
+		This process is called \textbf{enumeration} \cite{bloomenthal} (Section 4.2.2 in the book) and for some purposes it is too slow.
 		The original applications of the Marching cubes algorithm \cite{LorensenCline87marchingcubes} applied this slow approach.
 		However, these applications usually dealt with real-world data obtained through measurments (e.g., CT scans), not well defined mathematical objects.
 
-		An improvement to this basic enumeration scheme is known as \textbf{continuation} \cite{unchainedgeometry}.
+		An improvement to this basic enumeration scheme is known as \textbf{continuation} \cite{bloomenthal} (Section 4.2.3 in the book).
 		This idea of this approach is quite simple.
 		Starting from a single "seed" cell that intersects the surface of the shape, new cells are propagated across the surface until the entire surface is enclosed.
 		The complexity of this algorithm is $O(N^2)$ because only the surface cells are analyzed.
@@ -107,38 +128,38 @@
 		I.e., we need a separate seed cell to polygonize all disjoint shape components.
 		This can be problematic in practice.
 		Another issue with this approach is caused by limited numerical precision of digital computers when representing seed cell parameters
-		(e.g., its center point coordinates).
+		(e.g., their center point coordinates) -- this complicates the positioning of the seed cell.
 		Of course, this problems only show up for high grid resolutions, i.e., large values of $N$.
 
-		Another way to speed up the triangulization process is to use a variant of ray marching called Sphere tracing, described by John C. Hart \cite{HartEtAl89rtfractals,Hart94spheretracing}.
+		We also mention the unpublished work of Christopher Olah \cite{olah2011manipulation,olahImplicitCAD}. This method aims at similar goals (transform an SDB into a triangle mesh), but uses a different subdivision strategy over the grid (recursive partitioning instead of sphere tracing) and no detailed complexity analysis was performed.
+        It is not a formal academic work, but an implementation.
+
+        Besides the mentioned work that warrants a direct experimental comparison (enumeration and continuation \cite{bloomenthal}, Marching cubes \cite{LorensenCline87marchingcubes}) to our method, we also mention more broad work for additional context. There are a number of algorithms for speeding up isosurface extraction (as polygon meshes) from real-world data such as MRI and CT scans. E.g., based on octrees \cite{WilhelmsGelder} or other more exotic data structures \cite{CigoniEtAl,LivnatShenJohnson}.
+        However, these methods assume that data points on the grid are already known (sampled).
+        Thus, direct application of these algorithms to polygonizing SDBs is not possible.
+
+        There is also a large body of work of generative models for geometry.
+        In this context, we mention those that directly output polygons. Gao et al. \cite{gao2022get3d} represent geometry as a signed distance field defined on a deformable tetrahedral grid and incorporate this into a learning framework.
+        Their end result is a neural representation that can directly generate polygonal models from the training data distribution.
+        In the PolyDiff paper \cite{alliegro2023polydiff}, the authors introduce a mesh generator based on a denoising diffusion process \cite{sohldickstein2015deep,ho2020denoising}.
+        In the MeshGPT paper \cite{siddiqui2023meshgpt}, the authors use a decoder-only transformer neural network to directly output the polygons of a mesh.
+        All these works are learning-based, i.e., require a large dataset in order to be effective, are not easy to implement/use in a production system like a game engine and require significant computational resources.
+
+		The next section provides a detailed (mathematical, algorithmic) description of the gridhopping method to enable its analysis.
+
+	\section{Method}\label{sec:ghop}
+		Another way to speed up the triangulation process is to apply a variant of ray marching called Sphere Tracing (described by John C. Hart \cite{HartEtAl89rtfractals,Hart94spheretracing}).
+		Note that sphere tracing is originally a 3D rendering scheme.
+		However, we re-purpose it here for polygonization.
 		The basic idea is to define a ray and move along its direction until you find the intersection with the shape or exit the rendering volume.
 		In sphere tracing, the marching step is set to be equal to the (estimated) distance of the current point to the shape.
 		This approach greatly speeds up the process of finding the intersection.
 		However, unlike in the ray marching-based rendering of images, we do not stop the marching process at the surface.
 		The marching along the ray in continued (starting at the next cell along direction of the ray) until the end of the polygonization volume is reached.
-		Let us call this method \textbf{Gridhopping}.
+		Let us call this method \textbf{gridhopping}.
 		This process enables us to efficiently isolate the $O(N^2)$ cells that contain the surface of the shape:
-		we present theoretical and experiemntal evidence that this method extracts a triangle mesh from a signed distance bound in $O(N^2\log N)$ steps for a grid with $N^3$ cells.
-		Note that this is a significant speed improvement over the basic approach that analyzes each of the $N^3$ cells, leading to $O(N^3)$ complexity.
-
-		\textbf
-		{
-		Important note: we do not claim that the Gridhopping method is novel, i.e., that we are the first to introduce it.
-		We have not performed any extensive literature review\footnote{We mention here the work of Christopher Olah: \url{https://christopherolah.wordpress.com/2011/11/06/manipulation-of-implicit-functions-with-an-eye-on-cad/} (implementation: \url{https://github.com/Haskell-Things/ImplicitCAD}). The described method achieves similar goals, but no detailed complexity analysis was performed.},
-		but the method must have been considered in the past due to its simplicity and effectiveness.
-		Nevertheless, we do think that our exerimental and theoretical analysis has value,
-		at least to the computer vision and machine learning communities that has recently shown considerable interest in SDB-based shape modelling.
-		}
-
-		The outline of the rest of this report is as follows.
-		A detailed description of the Gridhopping method is in Section \ref{sec:ghop}.
-		In the next two sections, \ref{sec:complexity} and \ref{sec:experiments}, we analyze its theoretical and experimental speed.
-		Finally, Section \ref{sec:conclusion} provides concluding remarks and discusses possible future work.
-
-	\section{Details of the Gridhopping method}\label{sec:ghop}
-		Almost every effective algorithm is easy to describe.
-		However, some analysis and discussion is almost always necessary to understand its properties.
-		Gridhopping is no exception.
+		we present theoretical and experimental evidence that this method extracts a triangle mesh from a signed distance bound in $O(N^2\log N)$ steps for a grid with $N^3$ cells.
+		Note that this is a significant speed improvement over the basic approach that analyses each of the $N^3$ cells, leading to $O(N^3)$ complexity.
 
 		Without loss of generality, we assume that our polygonization volume is a unit cube centered at the origin.
 		The grid resolution is specified by $N$: there are $N^3$ cubic cells in the grid, each with a volume equal to $\frac{1}{N^3}$.
@@ -160,7 +181,7 @@
 		The $(x_i, y_j)$ pairs ($N^2$ of them) are computed according to equations \eqref{eq:cells}.
 
 		We move along each ray using the ray marching (sphere tracing) \cite{HartEtAl89rtfractals,Hart94spheretracing} method.
-		If the polygonization volume cotains a shape $S$ described by its signed distance bound $f_S$, the following iteration describes this process:
+		If the polygonization volume contains a shape $S$ described by its signed distance bound $f_S$, the following iteration describes this process:
 		\begin{equation}\label{eq:iter}
 			\mathbf{r}_{n+1}=
 			\mathbf{r}_n + \left|f_S(\mathbf{r}_n)\right|\mathbf{d}
@@ -174,8 +195,17 @@
 				\left(\frac{1}{2N}\right)^2 + \left(\frac{1}{2N}\right)^2 + \left(\frac{1}{N}\right)^2
 			}=
 			\frac{\sqrt{6}}{2N}
+            \label{eq:polydist}
 		\end{equation}
-		The pseudocode of the method \ref{code:method} contains the details.
+		The pseudocode in \ref{code:method} contains the details, and Figure \ref{visualsummary} provides a visual summary/illustration.
+        \begin{algorithm}
+			\label{code:method}
+			\resizebox{0.52\textwidth}{!}
+			{
+				\lstinputlisting[language=JavaScript]{kod.js}
+			}
+            \caption{Pseudocode for gridhopping.}
+		\end{algorithm}
 
 		If the ray intersects the surface and we denote the closest intersection to $\mathbf{r}_0$ with $\mathbf{r}^*$,
 		then the above iteration converges to $\mathbf{r}^*$.
@@ -190,18 +220,44 @@
 		\end{enumerate}
 		See \cite{Hart94spheretracing} for additional analysis.
 
-		\begin{figure}
-			\center
-			\resizebox{0.5\textwidth}{!}
-			{
-				\lstinputlisting[language=javascript]{kod.js}
-			}
-			\caption
-			{
-				Pseudocode for the Gridhopping method.
-			}
-			\label{code:method}
-		\end{figure}
+        \begin{figure*}
+        \center
+        \resizebox{0.7\textwidth}{!}
+		{
+        \begin{tikzpicture}[line cap = round]
+            \clip (-12, -3.5) rectangle (0.5, 4.5);
+            % shape filled with red
+            \fill[red] plot[smooth cycle, tension=.5] coordinates {(1.0, -2.0) (-1.0, 0.0) (-5.0, -2.0) (-6.0, 0.0) (2.0, 4.0) (5.0, -1.0) (4.0, -3.0) (2.0, -1.0)};
+            % grid with thicker and dashed lines
+            \draw[step=1.0,gray!25!,very thick, dashed] (-12, -4) grid (6, 5);
+            % z axis
+            \draw[->, line width=1.0mm] (-11.5, 0.5) -- (-7.5, 0.5); % z-axis arrow
+            \node[below,font=\Huge] at (-8.5, 0.25) {$z$}; % z-axis label
+            % xy plane
+            \draw[-, line width=1.0mm] (-9.5, -2.5) -- (-9.5, 3.5); % xy-plane arrow
+            \node[above,font=\Huge] at (-9.5, 3.5) {$xy$}; % xy-plane label
+            % cell that gets polygonized first
+            \fill[blue!20, opacity=0.5] (-5,1) rectangle ++(1,1);
+            % ray
+            \draw[->, dashed, green!70!black, line width=1.0mm] (-15.5, 1.5) -- (-1.5, 1.5);
+            % circles
+            \draw[green!70!black, dashed, line width=0.4mm] (-10.5, 1.5) circle [radius=4.6];
+            \draw[green!70!black, dashed, line width=0.4mm] (-5.9, 1.5) circle [radius=1.15];
+            % locations along the ray
+            \fill[green!70!black] (-10.5, 1.5) circle [radius=0.15];
+            \fill[green!70!black] (-5.9, 1.5) circle [radius=0.15];
+            \fill[green!70!black] (-4.75, 1.5) circle [radius=0.15];
+        \end{tikzpicture}
+        }
+        \caption
+        {
+            A 2D illustration of the gridhopping method: grid cells are dashed gray squares, the shape with a SDF is in red, the $z$ axis and the $xy$ plane are in black.
+            The dashed green line (parallel to the $z$ axis) represents one of the rays along which sphere tracing is applied.
+            Since the SDF of the red shape is known, we can compute the maximum step size along the ray: the green dots are locations obtained from these calculations.
+            The Marching cubes polygonization is first applied to the light blue cell since it is the first one along the ray that satisfies the condition related to equation \ref{eq:polydist}.
+        }
+        \label{visualsummary}
+        \end{figure*}
 
 	\section{Theoretical analysis of computational complexity}\label{sec:complexity}
 		We analyze the asymptotic number of steps required by the method from previous section to polygonize a shape defined through its signed distance bound.
@@ -242,13 +298,13 @@
 			The third case is the plane in a general position.
 
 			\textbf{Case \#1: plane $P$ and rays are perpendicular}.
-			First, notice that the orientation of the plane does not matter since the raymarching always uses the absolute value of the computed distance bound.
-			Thus, we have two subcases: approaching the plane and escaping the vicinity of its surface.
+			First, notice that the orientation of the plane does not matter since the ray marching always uses the absolute value of the computed distance bound.
+			Thus, we have two sub-cases: approaching the plane and escaping the vicinity of its surface.
 			The approaching phase is performed in a single step for each ray since $D_P$ provides the exact distance estimate.
 			Hence, its complexity is $O(1)$, independent of $N$, the position of the plane along the $z$ axis and the starting point.
 			Since there are $N^2$ rays, the complexity of the approaching phase is $O(N^2)$.
 			Escaping the plane's surface requires more work and the following analysis holds for each of the $N^2$ rays that need to be cast.
-			Let $\mathbf{r}_0$ donote the starting point in the vicinity of $P$'s surface.
+			Let $\mathbf{r}_0$ denote the starting point in the vicinity of $P$'s surface.
 			Note that $D_P(\mathbf{r}_0)$ is about $\frac{1}{N}$ in size immediately after the polygonization routines for $P$'s cells have been invoked
 			(at most two in this case, only one containing polygons).
 			Analyzing the iteration \eqref{eq:iter}, it is easy to see that $D_P(\mathbf{r}_1)=2\cdot D_P(\mathbf{r}_0)$ and in general the following holds:
@@ -295,9 +351,9 @@
 				-\frac{n_x x_0 + n_y y_0}{n_z}
 			\end{equation}
 			Without loss of generality, we assume that $n_z<0$.
-			There are two subcases:
+			There are two sub-cases:
 			(1) the method approaches the plane along the ray and (2) the method moves away from the plane along the ray.
-			In the first subcase, we have $n_x x_0 + n_y y_0 + n_z z_n > 0$.
+			In the first sub-case, we have $n_x x_0 + n_y y_0 + n_z z_n > 0$.
 			In this scenario, it is easy to see that
 			\begin{equation}
 				z^* - z_n =
@@ -307,7 +363,7 @@
 			\end{equation}
 			Since $1 + n_z$ is between $0$ and $1$, we have that the number of iterations $n$ has to be about $O(\log N)$ so that $D_P(\mathbf{r}_n)$ becomes less than $\frac{\sqrt{6}}{2N}$
 			(at which point the polygonization routine is invoked and we can move to the other side of the plane).
-			In the second subcase, we have $n_x x_0 + n_y y_0 + n_z z_n < 0$.
+			In the second sub-case, we have $n_x x_0 + n_y y_0 + n_z z_n < 0$.
 			Now the following holds:
 			\begin{equation}
 				z_n - z^* =
@@ -329,14 +385,14 @@
 			Since polygonizing each of the box sides takes $O(N^2\log N)$ steps, this is also the total complexity of polygonizing a box.
 
 			This can also be justified by the fact that the $\max$ operation partitions the polygonization volume into several regions.
-			In each of these regnder example at the beginning. Below I’ve attempted to draw a triangle, square, anions only the distance to one particular plane is relevant (largest $d_i$).
+			In each of these regions only the distance to one particular plane is relevant (largest $d_i$).
 			All the rays passing through this region require at most $O(N^2\log N)$ steps before exiting the region.
 			The conclusion about the total complexity follows from the fact that the number of such regions is finite.
 
 			As noted, Equation \eqref{eq:boxdist} bounds the distance to the box.
 			The exact distance function can be constructed and this leads to more efficient marching in practice
-			(a constant speed-up, not in the asymptotic sense).
-			For example, see \url{https://www.youtube.com/watch?v=62-pRVZuS5c}.
+			(a constant speed-up, not in the asymptotic sense)
+			\footnote{For example, see \url{https://www.youtube.com/watch?v=62-pRVZuS5c}.}.
 
 		\subsection{Polygonizing other shapes}
 			A shape can be approximated by $K$ axis-aligned boxes.
@@ -365,7 +421,7 @@
 			Thus, the total number of steps scales as $O(N^2\log N)$ since the grid resolution $N$ does not depend on $K$.
 
 	\section{Experimental analysis}\label{sec:experiments}
-		In this section we experimentally compare the three methods\footnote{Refer to Section \ref{sec:overview} for the overview of the methods.}: Gridhopping (\texttt{ghop}), enumeration (\texttt{enum}) and continuation (\texttt{cont}).
+		In this section we experimentally compare the three methods\footnote{Refer to Section \ref{sec:overview} for the overview of the methods.}: gridhopping (\texttt{ghop}), enumeration (\texttt{enum}) and continuation (\texttt{cont}).
 		The goal is to show that the \texttt{enum} method is asymptotically slower than \texttt{cont} and \texttt{ghop}.
 
 		The polygonization of a cell is obtained with the Marching cubes algorithm.
@@ -420,7 +476,7 @@
 		This aligns with the predictions from Section \ref{sec:complexity}.
 
 		\subsection{Experiments on learned SDBs}\label{sec:experiments-learned}
-		There has been considerable interest in learning-based methods for signed distance field modelling.
+		There has been considerable interest in learning-based methods for signed distance bound modelling.
 		And this is lately especially true in the area of deep learning
 		\cite{GenShapeCVPR2019,DeepShapeCVPR2019,davies2020overfit,hao2020dualsdf,SecretsOfWildSDFs2021,iccvw2021,stanfordgeom2021,asdf2021,takikawa2021nglod}\footnote{See section "Implicit representation" at \url{https://github.com/subeeshvasu/Awsome_Deep_Geometry_Learning} for more (and updated) examples.}.
 
@@ -434,7 +490,7 @@
 		The parameters of the $NN$ are denoted with $\theta$.
 		These parameters have to be tuned to make the approximation as best as possible.
 
-		Our hypothesis is that Gridhopping is a faster algorithm for transforming such neural SDBs to triangle meshes than by using the basic enumeration technique.
+		Our hypothesis is that gridhopping is a faster algorithm for transforming such neural SDBs to triangle meshes than by using the basic enumeration technique.
 		This should especially be true for higher grid resolutions.
 
 		To experimentally test our claim, we take six shapes from the Thingi10K dataset \cite{thingi10k}
@@ -479,15 +535,16 @@
 		We decided to go with this one to keep things as simple as possible.
 
 		Recall that if certain criteria are not met (e.g., Lipschitz continuity),
-		sphere tracing might "miss" parts of the surface of the shape and we get an incomplete mesh with Gridhopping \cite{Hart94spheretracing}.
+		sphere tracing might "miss" parts of the surface of the shape and we get an incomplete mesh with gridhopping \cite{Hart94spheretracing}.
 		In practice, this means that the NN overestiamtes the surface distance for some points
 		(e.g., due to the imperfection of the learning algorithm).
 		To circumvent these problems, we shrink the signed distance approximation by factor $\lambda$: $\text{SDB}(x, y, z)=\frac{\text{NN}_\theta(x, y, z)}{\lambda}$.
-		This procedure slows down Gridhopping and has no effects on the speed of the complete enumeration algorithm.
-		The shrinkage parameter $\lambda$ is set to $1.5$ in our experiments.
-		This (or smaller) value results in perfect mesh reconstructions for all shapes.
+		This procedure slows down gridhopping and has no effects on the speed of the complete enumeration algorithm.
+		%The shrinkage parameter $\lambda$ is set to $1.5$ in our experiments.
+        We empirically found that $\lambda=1.5$ works well.
+		This (or smaller) value results in perfect mesh reconstructions for all shapes, i.e., all methods produce identical meshes.
 
-		We compare the times needed to polygonize the prepared SDBs for the complete enumeration algorithm and Gridhopping.
+		We compare the times needed to polygonize the prepared SDBs for the complete enumeration algorithm and gridhopping.
 		The grid resolution $N$ varies from $64$ to $512$.
 		First, all computations are performed on Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz.
 		Batching the NN evaluations in chunks of size $\approx 10,000$ leads to significant speed improvements for both methods.
@@ -510,7 +567,7 @@
 			}
 			\label{fig:nnsdb-times-cpu}
 		\end{figure*}
-		Even though the enumeration method is sometimes faster for small grid resolutions, we can clearly observe that Gridhopping has a significant asymptotic advantage.
+		Even though the enumeration method is sometimes faster for small grid resolutions, we can clearly observe that gridhopping has a significant asymptotic advantage.
 		The resuts are in accordance with the theoretically predicted ones \ref{sec:complexity}: $\sim N^3$ vs. $\sim N^2$ computational complexity.
 
 		We also performed experiments when computations are performed on an Nvidia GeForce RTX 2060 Mobile GPU.
@@ -533,27 +590,37 @@
 		\end{figure*}
 		The theoretical complexity results hold in this setting as well.
 		Also, GPU computations are significantly faster than CPU ones.
-		However, Gridhopping is somewhat slower for smaller grid resolutions.
-		We attribute this fact to constant overhead needed to prepare the Gridhopping run.
+		However, gridhopping is somewhat slower for smaller grid resolutions.
+		We attribute this fact to constant overhead needed to prepare the gridhopping run.
 
 	\section{Conclusion}\label{sec:conclusion}
-		Gridhopping is method for transforming signed distance bounds into triangle meshes.
-		Its two main advantages are simplicity, ease of implementation and processing speed.
-		Its main limitations are the Lipschitz continuity requirement and the fact that it generates too many triangles for some simple shapes.
+		In this work we described and evaluated gridhopping -- a method for transforming shapes defined by signed distance bounds into triangle meshes.
+		Its main advantages are simplicity, ease of implementation and processing speed.
+        We confirmed this in theory and experiments by comparing the method to the enumeration and continuation variants of the Marching cubes algorithm \cite{LorensenCline87marchingcubes} which are the standard approaches for polygonizing signed distance bounds in practical applications.
+        We used both simple shapes defined by short equations/code and more complicated ones defined through neural networks.
+        We also showed that these conclusions hold when the computations are performed on the CPU and on the GPU, which is a further confirmation of the practicality of the method.
 
-		The code is available at \url{https://github.com/nenadmarkus/gridhopping}.
+		The main limitations of gridhopping are the Lipschitz continuity requirement, that it works only with abstract, mathematically defined, shapes and not real-world data like point clouds, and the fact that it generates too many triangles for some simple shapes.
+        Note that the last limitation also holds for Marching cubes as both methods produce identical triangle meshes.
+        Also, within the context of this paper, we would like to mention that the Marching cubes-based pipelines (gridhopping included) might be competing with deep learning-based methods that generate triangle meshes \cite{siddiqui2023meshgpt,alliegro2023polydiff}, especially if the texture is included \cite{gao2022get3d}.
+        However, these approaches are not practical in many situations due to their implementation complexity, large processing speed and the requirement for high-quality training data to be effective.
+        Therefore gridhopping is still relevant for the wider engineering community.
 
-	\section{History of this research}
-		\begin{itemize}
-		\item
-			Feb 2019: this research started as a hobby project to build a simple CAD tool for describing 3D shapes as computer code.
-		\item
-			Sep 2019: public version of code: \url{https://github.com/nenadmarkus/gridhopping}.
-		\item
-			Apr 2020: blog description of the method+analysis: \url{https://nenadmarkus.github.io/p/fast-algo-sdb-to-mesh}.
-		\item
-			Dec 2020: polygonizing NN-based SDBs: \url{https://nenadmarkus.github.io/p/learning-signed-distance-fields/}
-		\end{itemize}
+		Our implementation of the gridhopping method is available at \url{https://github.com/nenadmarkus/gridhopping}.
+
+    \section{Author contributions}
+        Conceptualization, methodology, software, writing: N. M. Review, editing, validation, funding acquisition: M. S.  
+\iffalse
+        All authors have read and agreed to the published version of the manuscript.
+
+    \section{Funding}
+        This research was supported by the Croatian National Recovery and Resilience Plan (NPOO) under the project Research and Development of Multiple Innovative Products, Services and Business Models Aimed at Strengthening Sustainable Tourism and the Green and Digital Transition of Tourism (ROBOCAMP), with grant number NPOO.C1.6.R1-I2.01.
+        Also, work was supported by the European Union under the project Enhanced Pilot Interfaces \& Interactions for fighter Cockpit (EPIIC) funded by European Defence Fund (EDF) Grant Agreement 101103592.
+
+    \section{Conflicts of interest}
+        The authors declare no conflicts of interest.
+        The funding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results.
+\fi
 
 	\bibliographystyle{abbrv}
 	\bibliography{references}

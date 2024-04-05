@@ -19,19 +19,20 @@
 @article
 {
 	LorensenCline87marchingcubes,
-	author = {W. E. Lorensen, H. E. Cline},
+	author = {W. E. Lorensen and H. E. Cline},
 	title = {Marching cubes: A high resolution 3D surface construction algorithm},
 	journal = {ACM SIGGRAPH computer graphics},
 	year = {1987}
 }
 
-@misc
+@book
 {
-	unchainedgeometry,
-	author = {J. Bloomenthal},
-	title = {Implicit Surfaces (chapter 3.5.1)},
-	url = {\url{http://www.unchainedgeometry.com/jbloom/pdf/impencyc.pdf}},
-	note = {2000},
+	bloomenthal,
+	editor = {J. Bloomenthal},
+	title = {Introduction to Implicit Surfaces},
+	publisher = {Morgan-Kaufmann},
+	year = {1997},
+	url = {\url{https://www.unchainedgeometry.com/JBloom/book.html}},
 }
 
 @misc
@@ -108,14 +109,14 @@
 {
 	davies2020overfit,
 	title={Overfit Neural Networks as a Compact Shape Representation},
-	author={Thomas Davies and Derek Nowrouzezahrai and Alec Jacobson},
+	author={T. Davies and D. Nowrouzezahrai and A. Jacobson},
 	year={2020},
 	howpublished={\url{https://arxiv.org/abs/2009.09808}}
 }
 
 @inproceedings{hao2020dualsdf,
   title={DualSDF: Semantic Shape Manipulation using a Two-Level Representation},
-  author={Hao, Zekun and Averbuch-Elor, Hadar and Snavely, Noah and Belongie, Serge},
+  author={Z. Hao and H. Averbuch-Elor and N. Snavely and S. Belongie},
   booktitle={CVPR},
   year={2020}
 }
@@ -123,7 +124,7 @@
 @misc
 {
 	SecretsOfWildSDFs2021,
-	author = {S. Duggal, Z. Wang, W.-C. Ma, S. Manivasagam, J. Liang, S. Wang, R. Urtasun},
+	author = {S. Duggal and Z. Wang and W.-C. Ma and S. Manivasagam and J. Liang and S. Wang and R. Urtasun},
 	title = {Secrets of 3D Implicit Object Shape Reconstruction in the Wild},
 	year={2021},
 	howpublished={\url{https://arxiv.org/abs/2101.06860}}
@@ -158,15 +159,93 @@
 
 @inproceedings{takikawa2021nglod,
     title = {Neural Geometric Level of Detail: Real-time Rendering with Implicit {3D} Shapes},
-    author = {Towaki Takikawa and
-              Joey Litalien and
-              Kangxue Yin and
-              Karsten Kreis and
-              Charles Loop and
-              Derek Nowrouzezahrai and
-              Alec Jacobson and
-              Morgan McGuire and
-              Sanja Fidler},
+    author = {T. Takikawa and J. Litalien and K. Yin and K. Kreis and C. Loop and D. Nowrouzezahrai and A. Jacobson and M. McGuire and S. Fidler},
     booktitle = {CVPR},
     year = {2021}
+}
+
+
+@article
+{
+	WilhelmsGelder,
+	author = {J. Wilhelms and A. V. Gelder},
+	title = {Octrees for faster isosurface generation},
+	journal = {Transactions on Graphics},
+	year = {1992}
+}
+
+@misc{olah2011manipulation,
+  author = {Olah, Christopher},
+  title = {Manipulation of Implicit Functions with an Eye on CAD},
+  year = {2011},
+  howpublished = {\url{https://christopherolah.wordpress.com/2011/11/06/manipulation-of-implicit-functions-with-an-eye-on-cad/}},
+  note = {Accessed: Feb 26 2024}
+}
+
+@misc{olahImplicitCAD,
+  author = {Olah, Christopher},
+  title = {ImplicitCAD},
+  year = {2011},
+  howpublished = {\url{https://github.com/Haskell-Things/ImplicitCAD}},
+  note = {Accessed: Feb 26 2024}
+}
+
+@article
+{
+	LivnatShenJohnson,
+	author = {Y. Livnat and H.-W. Shen and C. R. Johnson},
+	title = {A Near Optimal Isosurface Extraction Algorithm Using the Span Space},
+	journal = {IEEE Transactions on Visualization and Computer Graphics},
+	year = {1996}
+}
+
+@article
+{
+	CigoniEtAl,
+	author = {P. Cigoni and P. Marino and C. Montani and E. Puppo and R. Scopigno},
+	title = {Speeding Up Isosurface Extraction Using Interval Trees},
+	journal = {IEEE Transactions on Visualization and Computer Graphics},
+	year = {1997}
+}
+
+
+@inproceedings{gao2022get3d,
+    title={GET3D: A Generative Model of High Quality 3D Textured Shapes Learned from Images},
+    author={J. Gao and T. Shen and Z. Wang and W. Chen and K. Yin and D. Li and O. Litany and Z. Gojcic and S. Fidler},
+    booktitle={Advances In Neural Information Processing Systems},
+    year={2022}
+}
+
+@misc{alliegro2023polydiff,
+      title={PolyDiff: Generating 3D Polygonal Meshes with Diffusion Models}, 
+      author={A. Alliegro and Y. Siddiqui and T. Tommasi and M. Nießner},
+      year={2023},
+      eprint={2312.11417},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@inproceedings{sohldickstein2015deep,
+  title = 	 {Deep Unsupervised Learning using Nonequilibrium Thermodynamics},
+  author = 	 {J. Sohl-Dickstein and E. Weiss and N. Maheswaranathan and S. Ganguli},
+  booktitle = 	 {ICML},
+  year = 	 {2015}
+}
+
+@misc{ho2020denoising,
+      title={Denoising Diffusion Probabilistic Models}, 
+      author={J. Ho and A. Jain and P. Abbeel},
+      year={2020},
+      eprint={2006.11239},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@misc{siddiqui2023meshgpt,
+      title={MeshGPT: Generating Triangle Meshes with Decoder-Only Transformers}, 
+      author={Y. Siddiqui and A. Alliegro and A. Artemov and T. Tommasi and D. Sirigatti and V. Rosov and A. Dai and M. Nießner},
+      year={2023},
+      eprint={2311.15475},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }

@@ -3,18 +3,18 @@
 //  * `N` is the grid resolution
 function apply_grid_hopping(eval_sdb, N)
 {
-	for (var i=0; i<N; ++i)
-		for (var j=0; j<N; ++j)
+	for (int i=0; i<N; ++i)
+		for (int j=0; j<N; ++j)
 		{
-			var k=0;
+			int k=0;
 			while (true)
 			{
 				// set the origin of the ray
-				var x=-1.0/2.0+1.0/(2.0*N)+i/N;
-				var y=-1.0/2.0+1.0/(2.0*N)+j/N;
-				var z=-1.0/2.0+1.0/(2.0*N)+k/N;
+				float x=-1.0/2.0+1.0/(2.0*N)+i/N;
+				float y=-1.0/2.0+1.0/(2.0*N)+j/N;
+				float z=-1.0/2.0+1.0/(2.0*N)+k/N;
 				// use ray marching to determine how much to move along the ray
-				var t = trace_ray(
+				float t = trace_ray(
 					[x, y, z],             // origin of the ray
 					[0.0, 0.0, 1.0],       // direction of the ray
 					eval_sdb,              // signed distance bound

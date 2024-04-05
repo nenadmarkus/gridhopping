@@ -1,9 +1,12 @@
+\resizebox{0.95\textwidth}{!}
+{
 \begin{tikzpicture}
 \begin{axis} [
 	ymode=log,
 	xlabel={Resolution},
 	ylabel={Elapsed time [s]},
 	xmin=64, xmax=2048,
+    ymin=0.004, ymax=270,
 	xmode=log, log basis x=2,
 	legend pos=north west
 ]
@@ -28,6 +31,7 @@
 	xlabel={Resolution},
 	ylabel={Elapsed time [s]},
 	xmin=64, xmax=2048,
+    ymin=0.005, ymax=150,
 	xmode=log, log basis x=2,
 	legend pos=north west
 ]
@@ -45,14 +49,17 @@
 			};
 \end{axis}
 \end{tikzpicture}
+}
 
-
+\resizebox{0.95\textwidth}{!}
+{
 \begin{tikzpicture}
 \begin{axis} [
 	ymode=log,
 	xlabel={Resolution},
 	ylabel={Elapsed time [s]},
 	xmin=64, xmax=2048,
+    ymin=0.011, ymax=400,
 	xmode=log, log basis x=2,
 	legend pos=north west
 ]
@@ -76,6 +83,7 @@
 	xlabel={Resolution},
 	ylabel={Elapsed time [s]},
 	xmin=64, xmax=2048,
+    ymin=0.018, ymax=300,
 	xmode=log, log basis x=2,
 	legend pos=north west
 ]
@@ -93,3 +101,4 @@
 			};
 \end{axis}
 \end{tikzpicture}
+}
